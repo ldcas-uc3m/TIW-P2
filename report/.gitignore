@@ -13,6 +13,6 @@
 *.toc
 
 svg-inkscape/
-_markdown_report/
+_markdown_report
 
 report.pdf
