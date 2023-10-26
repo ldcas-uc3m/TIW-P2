@@ -1,6 +1,7 @@
 package entities;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
 
 import utils.ValidadorDNI;
@@ -31,13 +32,13 @@ public class Jugador implements Serializable {
 
 	public Jugador() { }
 
-	public int getDni() {
+	public String getDni() {
 		return this.dni;
 	}
 
 	public void setDni(String dni) {
 		// validar DNI
-        if (!ValidadorDNI.validarDNI(DNI)) {
+        if (!ValidadorDNI.validarDNI(dni)) {
         	throw new IllegalArgumentException("DNI no válido");
         }
 
@@ -56,7 +57,7 @@ public class Jugador implements Serializable {
 		this.nombre = nombre;
 	}
 
-	public BigInteger getApellidos() {
+	public String getApellidos() {
 		return this.apellidos;
 	}
 
@@ -73,10 +74,6 @@ public class Jugador implements Serializable {
 	}
 
 	public void setAlias(String alias) {
-		if (alias.length() == 0) {
-    		throw new IllegalArgumentException("Campo 'Alias' vacío");
-    	}
-
 		this.alias = alias;
 	}
 
@@ -85,7 +82,12 @@ public class Jugador implements Serializable {
 	}
 
 	public void setPosicion(Posicion posicion) {
-		posicion.addJugador();
+		try {
+			posicion.addJugador();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

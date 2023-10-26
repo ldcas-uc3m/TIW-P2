@@ -10,8 +10,8 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="posiciones")
-@NamedQuery(name="Posicion.getPosiciones", query="SELECT p.nombre FROM Posicion p")
-@NamedQuery(name="Posicion.getPosicionByName", query="SELECT p FROM Posicion p WHERE p.name LIKE :posicion")
+@NamedQuery(name="Posicion.getPosiciones", query="SELECT p FROM Posicion p")
+// @NamedQuery(name="Posicion.getPosicionByName", query="SELECT p FROM Posicion p WHERE p.name LIKE :posicion")
 public class Posicion implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -23,7 +23,7 @@ public class Posicion implements Serializable {
 
 	public Posicion() { }
 
-	public int getNombre() {
+	public String getNombre() {
 		return this.nombre;
 	}
 
@@ -35,13 +35,17 @@ public class Posicion implements Serializable {
 		return this.num_jugadores;
 	}
 
-	public void addJugador() {
-		if this.num_jugadores < this.max_jugadores {
+	public void addJugador() throws Exception {
+		if (this.num_jugadores < this.max_jugadores) {
 			this.num_jugadores++;
 		}
 		else {
-			throw;
+			throw new Exception("Lorem ipsum");
 		}
+	}
+	
+	public boolean isMax() {
+		return this.num_jugadores >= this.max_jugadores;
 	}
 
 }

@@ -1,7 +1,7 @@
 package servlets;
 
 import java.io.IOException;
-import java.math.BigInteger;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +18,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.UserTransaction;
 
-import entities.Artist;
+import entities.Jugador;
+import entities.Posicion;
+
 
 @WebServlet(urlPatterns = { "*.html" })
 public class FrontController extends HttpServlet {
@@ -113,13 +115,13 @@ public class FrontController extends HttpServlet {
 			return "Error.jsp";
 		}
 
-		Artist a = em.find(Artist.class, Integer.parseInt(id));
+		// Artist a = em.find(Artist.class, Integer.parseInt(id));
 
-		if (a == null)
-			return null;
-		
-		
-		request.setAttribute("artist", a);
+//		if (a == null)
+//			return null;
+//		
+//		
+//		request.setAttribute("artist", a);
 
 		return "/ArtistEditPage.jsp";
 
@@ -134,11 +136,11 @@ public class FrontController extends HttpServlet {
 		
 		try {
 			ut.begin();
-			Artist toDeleteArtist = em.find(Artist.class, idArtist);
-			request.setAttribute("message", "Successfully removed record "+toDeleteArtist.getName());
-			System.out.print("ELIMINANDO..." + toDeleteArtist.getName());
-			
-			em.remove(toDeleteArtist);
+			// Artist toDeleteArtist = em.find(Artist.class, idArtist);
+//			request.setAttribute("message", "Successfully removed record "+toDeleteArtist.getName());
+//			System.out.print("ELIMINANDO..." + toDeleteArtist.getName());
+//			
+//			em.remove(toDeleteArtist);
 			ut.commit();
 
 			return "ArtistEditPage.jsp";
@@ -164,9 +166,9 @@ public class FrontController extends HttpServlet {
 			try {
 
 				Query q = em.createQuery("SELECT a FROM Artist a");
-				@SuppressWarnings("unchecked")
-				List<Artist> artistList = (List<Artist>) q.getResultList();
-				request.setAttribute("artistList", artistList);
+//				@SuppressWarnings("unchecked")
+//				// List<Artist> artistList = (List<Artist>) q.getResultList();
+//				request.setAttribute("artistList", artistList);
 			} catch (Exception e) {
 				System.out.print(e);
 
@@ -178,19 +180,19 @@ public class FrontController extends HttpServlet {
 		try {
 
 			ut.begin();
-			List<Artist> artistList = new ArrayList<Artist>();
+			// List<Artist> artistList = new ArrayList<Artist>();
 
-			Artist foundArtist = em.find(Artist.class, Integer.parseInt(request.getParameter("search")));
+			// Artist foundArtist = em.find(Artist.class, Integer.parseInt(request.getParameter("search")));
 
-			if (foundArtist != null) {
-				request.setAttribute("found", true);
-			}
-
-			artistList.add(foundArtist);
+//			if (foundArtist != null) {
+//				request.setAttribute("found", true);
+//			}
+//
+//			artistList.add(foundArtist);
 
 			ut.commit();
 
-			request.setAttribute("artistList", artistList);
+//			request.setAttribute("artistList", artistList);
 			return "SearchArtistPage.jsp";
 
 		} catch (Exception e) {
@@ -210,23 +212,22 @@ public class FrontController extends HttpServlet {
 
 		System.out.print("ID ARTIST:" + idArtist);
 
-		Artist toUpdateArtist = em.find(Artist.class, idArtist);
+		// Artist toUpdateArtist = em.find(Artist.class, idArtist);
 
 		String nuName = request.getParameter("name");
 		String nuDescription = request.getParameter("description");
 
-		BigInteger nuFollowers = new BigInteger(request.getParameter("followers"));
 
 		try {
 			ut.begin();
 
-			toUpdateArtist.setName(nuName);
-			toUpdateArtist.setDescription(nuDescription);
-			toUpdateArtist.setFollowers(nuFollowers);
-			em.merge(toUpdateArtist);
+//			toUpdateArtist.setName(nuName);
+//			toUpdateArtist.setDescription(nuDescription);
+//			toUpdateArtist.setFollowers(nuFollowers);
+//			em.merge(toUpdateArtist);
 			ut.commit();
 
-			request.setAttribute("artist", toUpdateArtist);
+//			request.setAttribute("artist", toUpdateArtist);
 
 			request.setAttribute("message", "Successfully updated record.");
 			

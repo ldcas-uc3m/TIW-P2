@@ -119,5 +119,9 @@ https://nexus.payara.fish/#browse/browse:payara-community:fish%2Fpayara%2Fdistri
 
 ## Ejecución
 En Eclipse:
-    1. Importa el proyecto deseado desde `File` → `Open Projects From File System...` → `Directory` → <projecto deseado, e.g `<path-to>tiwclase1/`> → `Finish`.
-    2. Asegúrate de tener seleccionado el proyecto y haz clic en `Run` → `Run As` → `Run on Server` y selecciona tu servidor de Payara.
+1. Importa el proyecto deseado desde `File` → `Open Projects From File System...` → `Directory` → <projecto deseado, e.g `<path-to>tiwclase1/`> → `Finish`.
+<!-- 2. [???] Conviértelo en un projecto JPA:
+    1. `Project` → `Properties` → `Project Facets`
+    2. Haz tick en la caja de JPA
+    3. A la derecha, pestaña `Runtimes`, y selecciona `Payara` -->
+3. Asegúrate de tener seleccionado el proyecto y haz clic en `Run` → `Run As` → `Run on Server` y selecciona tu servidor de Payara.
