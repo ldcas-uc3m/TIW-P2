@@ -48,7 +48,7 @@ public class FrontController extends HttpServlet {
 
 		// EXTRAEMOS EL FRAGMENTO DE URL DE LA PETICIÓN REALIZADA POR EL CLIENTE
 		String pathAskedFor = request.getServletPath();
-		System.out.print("[@alreylz] Front Controller --> PATH REQUESTED: " + pathAskedFor + " REQUEST METHOD :"
+		System.out.print("Front Controller --> PATH REQUESTED: " + pathAskedFor + " REQUEST METHOD :"
 				+ request.getMethod());
 
 		// Mostramos la página de Home por defecto al arrancar la aplicación (petición a
@@ -66,8 +66,8 @@ public class FrontController extends HttpServlet {
 			forwardToJSP = "Home.jsp";
 			break;
 
-		case "/InsertArtistPage.html":
-			forwardToJSP = InsertArtistPageHandler(request, response);
+		case "/InsertarJugador.html":
+			forwardToJSP = InsertJugadorPageHandler(request, response);
 			break;
 
 		case "/SearchArtistPage.html":
@@ -138,15 +138,9 @@ public class FrontController extends HttpServlet {
 			request.setAttribute("message", "Successfully removed record "+toDeleteArtist.getName());
 			System.out.print("ELIMINANDO..." + toDeleteArtist.getName());
 			
-			
-			
 			em.remove(toDeleteArtist);
 			ut.commit();
 
-
-			
-			
-			
 			return "ArtistEditPage.jsp";
 
 		} catch (Exception e) {
@@ -246,27 +240,39 @@ public class FrontController extends HttpServlet {
 
 	}
 
-	private String InsertArtistPageHandler(HttpServletRequest request, HttpServletResponse response)
+	private String InsertJugadorPageHandler(HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 
 		String requestMethod = request.getMethod();
 
 		if (requestMethod == "GET") {
-			return "ArtistInsertForm.jsp";
+			return "InsertarJugadorForm.jsp";
 		}
 
-		Artist nuArtist = new Artist();
-		nuArtist.setName(request.getParameter("name"));
-		nuArtist.setDescription(request.getParameter("description"));
-		nuArtist.setFollowers(new BigInteger(request.getParameter("followers")));
+		Jugador nuJugador = new Jugador();
+		nuJugador.setNombre(request.getParameter("nombre"));
+		nuJugador.setApellidos(request.getParameter("apellidos"));
+		nuJugador.setDni(request.getParameter("dni"));
+		nuJugador.setAlias(request.getParameter("alias"));
+
+		// get posicion
+		// Query query = em.createdNamedQuery("Posicion.getPosicionByName").setParameter("posicion", request.getParameter("posicion"));
+
+		// List<Posicion> pos = query.getResultList();
+
+		Posicion posicion = em.find(Posicion.class, request.getParameter("posicion"));
+
+		nuJugador.setPosicion(posicion);
+
 
 		try {
 			ut.begin();
-			em.persist(nuArtist);
+			em.persist(nuJugador);
 			ut.commit();
 
-			request.setAttribute("artist", nuArtist);
-			return "ArtistEditPage.jsp";
+			request.setAttribute("jugador", nuJugador);
+
+			return "Home.jsp";
 
 		} catch (Exception e) {
 

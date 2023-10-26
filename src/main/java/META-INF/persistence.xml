@@ -2,13 +2,9 @@
 <persistence version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
 		<persistence-unit name="PU" transaction-type="JTA">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-		<jta-data-source>jdbc/tiw2223</jta-data-source>
-		<class>entities.Album</class>
-		<class>entities.ArtistPhoto</class>
-		<class>entities.Artist</class>
-		<class>entities.Concert</class>
-		<class>entities.ConcertsHasArtist</class>
-		<class>entities.Song</class>
+		<jta-data-source>jdbc/tiwp2</jta-data-source>
+		<class>entities.Jugador</class>
+		<class>entities.Posicion</class>
 		<properties>
 		<property name="eclipselink.ddl-generation" value="create-tables" />
         <property name="eclipselink.ddl-generation.output-mode"

@@ -57,7 +57,7 @@ https://nexus.payara.fish/#browse/browse:payara-community:fish%2Fpayara%2Fdistri
         ```sql
         mysql> exit;
         ```
-    5. Use the [`dbCreate.sql`](LAB2-JPA/src/main/java/db_create.sql) script to create the `tiwp2` table inside of the `tiwp2` database.
+    5. Use the [`db_create.sql`](LAB2-JPA/src/main/java/db_create.sql) script to create the `tiwp2` table inside of the `tiwp2` database.
         - Linux
             ```bash
             $ mysql -u root -proot tiwp2 < <path-to>/dbCreate.sql
@@ -70,7 +70,7 @@ https://nexus.payara.fish/#browse/browse:payara-community:fish%2Fpayara%2Fdistri
             mysql> source <path-to>\dbCreate.sql
             mysql> exit;
             ```
-9. (OPTIONAL) Configure Eclipse Database Connection `MySQL8.1.0-tiwp2` to the `tiwp2` MySQL database.
+9. Configure Eclipse Database Connection `MySQL8.1.0-tiwp2` to the `tiwp2` MySQL database.
     1. Got to `Data Source Explorer` → Right-Click on `Database Connections` → `New...`
     2. Select `MySQL`, in `Name` put `MySQL8.1.0-tiwp2`
     3. Click the icon for `New driver definition` to the right of `Drivers:` 
