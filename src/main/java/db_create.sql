@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `tiwp2`.`jugadores` (
   `posicion_nombre` VARCHAR(15) NOT NULL,
   PRIMARY KEY (`dni`),
   CONSTRAINT `fk_jugadores_posicion`
-    FOREIGN KEY (`posicion`)
+    FOREIGN KEY (`posicion_nombre`)
     REFERENCES `tiwp2`.`posiciones` (`nombre`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
