@@ -84,6 +84,7 @@ public class Jugador implements Serializable {
 	public void setPosicion(Posicion posicion) {
 		try {
 			posicion.addJugador();
+			this.posicion = posicion;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

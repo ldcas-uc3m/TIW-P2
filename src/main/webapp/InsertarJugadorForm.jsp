@@ -53,11 +53,14 @@
 						// TODO: ver numero de posiciones y mostrar conforme a eso
 					
 					for (Posicion p : posiciones) {
+						System.out.print(p.getNumJugadores());
 						if (p.isMax()) continue;
+						
 					%>
 						<option value="<%= p.getNombre() %>"><%= p.getNombre() %></option>
 					<%
 					}
+					em.close();
 					%>
 					</select>
 

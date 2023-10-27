@@ -69,7 +69,7 @@ public class FrontController extends HttpServlet {
 			break;
 
 		case "/InsertarJugador.html":
-			forwardToJSP = InsertJugadorPageHandler(request, response);
+			forwardToJSP = InsertJugador(request, response);
 			break;
 
 		case "/SearchArtistPage.html":
@@ -241,7 +241,7 @@ public class FrontController extends HttpServlet {
 
 	}
 
-	private String InsertJugadorPageHandler(HttpServletRequest request, HttpServletResponse response)
+	private String InsertJugador(HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 
 		String requestMethod = request.getMethod();
@@ -261,17 +261,17 @@ public class FrontController extends HttpServlet {
 
 		// List<Posicion> pos = query.getResultList();
 
-		Posicion posicion = em.find(Posicion.class, request.getParameter("posicion"));
-
-		nuJugador.setPosicion(posicion);
 
 
 		try {
 			ut.begin();
 			em.persist(nuJugador);
-			ut.commit();
+			Posicion posicion = em.find(Posicion.class, request.getParameter("posicion"));
+			em.persist(posicion);
+			nuJugador.setPosicion(posicion);
 
 			request.setAttribute("jugador", nuJugador);
+			ut.commit();
 
 			return "Home.jsp";
 

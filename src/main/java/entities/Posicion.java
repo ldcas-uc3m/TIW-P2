@@ -45,7 +45,7 @@ public class Posicion implements Serializable {
 	}
 	
 	public boolean isMax() {
-		return this.num_jugadores >= this.max_jugadores;
+		return (this.num_jugadores == this.max_jugadores);
 	}
 
 }
