@@ -21,42 +21,67 @@
 	</head>
 	<body>
 
-		<!--  Incluimos cabecera global -->
 		<%@ include file="Header.jsp" %>
-
-		<h1>Plantilla del Atleti</h1>
-    
-  	<ol start="0">
-
-    <%
-    // get jugadores
-    // @PersistenceContext(unitName = "PU")
-    EntityManagerFactory factory = Persistence.createEntityManagerFactory("PU");
-    EntityManager em = factory.createEntityManager();
-    
-    Query query = em.createNamedQuery("Jugador.findAll");
-    
-	List<Jugador> jugadores = query.getResultList();
+    	
+    	<h2>Plantilla actual</h2>
+    	
+    	<%
+    	EntityManagerFactory factory = Persistence.createEntityManagerFactory("PU");
+		EntityManager em = factory.createEntityManager();
+    	%>
+    	
+    	<p>
+    		| 
+	    	<%
+	    	// get posiciones
+			Query query_pos = em.createNamedQuery("Posicion.getPosiciones");
+			List<Posicion> posiciones = query_pos.getResultList();
+			
+			for (Posicion pos : posiciones) {
+			%>
+				<%= pos.getNombre() %>s: <%= pos.getNumJugadores() %>/<%= pos.getMaxJugadores() %> | 
+			<%
+			}
+			%>
+		</p>
+		
+		
+		<!-- Jugadores -->
+	  	<ol start="0">
+	    <%
 	
-    
-	int i = 0;
-    for (Jugador j : jugadores) {
-   	%>
-   	<li>
-      [<%= j.getPosicion() %>] <%= j.getNombre() %> "<%= j.getAlias() %>" <%= j.getApellidos() %> - <%= j.getDni() %>
-       <a href="EditarJugadorPage.html?index=<%=i%>">Editar</a>
-       <a href="EliminarJugador.html?index=<%=i%>">Eliminar</a>
-      </li>
-    <%
-		i++;
-
-    }
-	em.close();
-    %>
-  	</ol>
-
-
-    <a href="InsertarJugadorForm.jsp">Insertar Jugador</a>
+	    Query query_jug = em.createNamedQuery("Jugador.findAll");
+	    
+		List<Jugador> jugadores = query_jug.getResultList();
+		
+	    
+		int i = 0;
+	    for (Jugador j : jugadores) {
+	   	%>
+	   		<li>
+	   			[<%= j.getPosicion() %>] <%= j.getNombre() %> 
+		   		<%
+		   		if (j.getAlias() != null) {
+	   			%>
+	   				"<%= j.getAlias() %>"
+		   		<%
+		   		}
+		   		%>
+	       		<%= j.getApellidos() %> - <%= j.getDni() %>
+	       		
+	       		|
+	     
+	       		<a href="EditarJugadorPage.html?id=<%= j.getDni() %>">Editar</a>
+	       		<a href="EliminarJugador.html?id=<%= j.getDni() %>">Eliminar</a>
+	      	</li>
+	    <%
+	    }
+		em.close();
+	    %>
+	  	</ol>
+	
+	
+	    <a href="InsertarJugadorForm.jsp">Insertar Jugador</a>
 
 
 		<!--  Incluimos footer global -->

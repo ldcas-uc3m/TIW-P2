@@ -26,7 +26,7 @@
 	<%@ include file="Header.jsp" %>
 
 
-		<h1>Insertar jugador</h1>
+		<h2>Insertar jugador</h2>
 		
 		<%
 		if (request.getAttribute("error") != null) {

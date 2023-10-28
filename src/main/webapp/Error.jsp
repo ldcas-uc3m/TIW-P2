@@ -11,16 +11,8 @@
 
 <%@include file="Header.jsp"%>
 
-
-
-
-
-
-
-
 <h1> Error page</h1>
 <% if(exception != null){  %>
-
 
 
 <%= exception.getClass() %>

@@ -1,14 +1,13 @@
 package servlets;
 
 import java.io.IOException;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.RollbackException;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -17,6 +16,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.UserTransaction;
+
+import org.eclipse.persistence.exceptions.DatabaseException;
 
 import entities.Jugador;
 import entities.Posicion;
@@ -241,7 +242,7 @@ public class FrontController extends HttpServlet {
 
 	}
 
-	private String InsertJugador(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	private String InsertJugador(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, DatabaseException {
 
 		String requestMethod = request.getMethod();
 
@@ -249,17 +250,21 @@ public class FrontController extends HttpServlet {
 			return "InsertarJugadorForm.jsp";
 		}
 		
-//		try {
+		// comprobar que no existe ya el jugador
+		if (em.find(Jugador.class, request.getParameter("dni")) != null) {
+			System.out.print("El jugador con DNI " + request.getParameter("dni") + " ya existe");
+			request.setAttribute("error", "El jugador con DNI " + request.getParameter("dni") + " ya existe");
+			
+			return "InsertarJugadorForm.jsp";
+		}
+		
 		try {
 			Jugador nuJugador = new Jugador();
+			nuJugador.setDni(request.getParameter("dni"));
 			nuJugador.setNombre(request.getParameter("nombre"));
 			nuJugador.setApellidos(request.getParameter("apellidos"));
-			nuJugador.setDni(request.getParameter("dni"));
 			nuJugador.setAlias(request.getParameter("alias"));
 
-//		} catch (IllegalArgumentException e) {
-//			response.getWriter().append(e.getMessage());
-//		}
 
 			ut.begin();
 			em.persist(nuJugador);

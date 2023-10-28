@@ -3,13 +3,16 @@
 
 
 <footer>
-	<br> <a href="./Home.jsp">Ir a la Home.....</a> <br>
-
 	<hr>
-	<p>
-		<img border="0" src="imagenes/logoapp.png" width="152" height="49"
-			align="middle" alt="Universidad Carlos III de Madrid"><br>
-	</p>
-
-
+	<table border="0">
+		<tbody>
+			<tr>
+				<td><img style="padding-right: 8px" src="imagenes/logoapp.png" width="152" height="49"></td>
+				<td><font color="blue">
+					Equipo 02, grupo 89.</br>
+					Tecnolog&iacuteas Inform&aacuteticas de la Web 23/24
+				</font></td>
+			</tr>
+		</tbody>
+	</table>
 </footer>
