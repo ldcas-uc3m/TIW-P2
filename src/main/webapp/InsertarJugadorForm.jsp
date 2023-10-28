@@ -27,7 +27,14 @@
 
 
 		<h1>Insertar jugador</h1>
-
+		
+		<%
+		if (request.getAttribute("error") != null) {
+		%>	
+			<p>Error: <%= request.getAttribute("error").toString() %></p>
+		<%	
+		}
+		%>
 
 		<article>
 			<form action="InsertarJugador.html" method="post">
@@ -53,11 +60,14 @@
 						// TODO: ver numero de posiciones y mostrar conforme a eso
 					
 					for (Posicion p : posiciones) {
+						System.out.print(p.getNumJugadores());
 						if (p.isMax()) continue;
+						
 					%>
 						<option value="<%= p.getNombre() %>"><%= p.getNombre() %></option>
 					<%
 					}
+					em.close();
 					%>
 					</select>
 

@@ -36,7 +36,7 @@ public class Jugador implements Serializable {
 		return this.dni;
 	}
 
-	public void setDni(String dni) {
+	public void setDni(String dni) throws IllegalArgumentException {
 		// validar DNI
         if (!ValidadorDNI.validarDNI(dni)) {
         	throw new IllegalArgumentException("DNI no válido");
@@ -49,7 +49,7 @@ public class Jugador implements Serializable {
 		return this.nombre;
 	}
 
-	public void setNombre(String nombre) {
+	public void setNombre(String nombre) throws IllegalArgumentException {
 		if (nombre.length() == 0) {
     		throw new IllegalArgumentException("Campo 'Nombre' vacío");
     	}
@@ -61,7 +61,7 @@ public class Jugador implements Serializable {
 		return this.apellidos;
 	}
 
-	public void setApellidos(String apellidos) {
+	public void setApellidos(String apellidos) throws IllegalArgumentException {
 		if (apellidos.length() == 0) {
     		throw new IllegalArgumentException("Campo 'Apellidos' vacío");
     	}
@@ -81,13 +81,9 @@ public class Jugador implements Serializable {
 		return this.posicion.getNombre();
 	}
 
-	public void setPosicion(Posicion posicion) {
-		try {
-			posicion.addJugador();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void setPosicion(Posicion posicion) throws IllegalArgumentException {
+		posicion.addJugador();
+		this.posicion = posicion;
 	}
 
 }
