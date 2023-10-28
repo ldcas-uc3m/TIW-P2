@@ -23,7 +23,7 @@ https://nexus.payara.fish/#browse/browse:payara-community:fish%2Fpayara%2Fdistri
     1. Abre la vista `Servers` en `Window` → `Show View` → `Other` → `Server` → `Server`.
     2. Ve a la vista `Servers` (abajo) y haz clic en `No servers are available. Click this link to create new server...` → `Payara` → `Payara`, y selecciona la versión 17 de Java y la dirección de la carpeta de payara (`payara5/`).
 5. Download and install [MySQL Community Server 8.1.0](https://dev.mysql.com/downloads/mysql/) and, optionally, [MySQL Workbench](https://dev.mysql.com/downloads/workbench/).
-6. Download the [MySQL Java driver](https://dev.mysql.com/downloads/connector/j/) and save the `mysql-connector-j-8.1.0.jar` to `<payara-path>/glassfish/lib`.
+6. Download the [MySQL Java driver (Platform Independent)](https://dev.mysql.com/downloads/connector/j/) and save the `mysql-connector-j-8.1.0.jar` to `<payara-path>/glassfish/lib/`.
 7. Start MySQL server (if it's not started already)
     - Linux
         ```bash
