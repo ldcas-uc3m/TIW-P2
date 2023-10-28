@@ -27,7 +27,14 @@
 
 
 		<h1>Insertar jugador</h1>
-
+		
+		<%
+		if (request.getAttribute("error") != null) {
+		%>	
+			<p>Error: <%= request.getAttribute("error").toString() %></p>
+		<%	
+		}
+		%>
 
 		<article>
 			<form action="InsertarJugador.html" method="post">

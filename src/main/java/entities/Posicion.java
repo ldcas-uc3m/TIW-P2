@@ -35,12 +35,12 @@ public class Posicion implements Serializable {
 		return this.num_jugadores;
 	}
 
-	public void addJugador() throws Exception {
+	public void addJugador() throws IllegalArgumentException {
 		if (this.num_jugadores < this.max_jugadores) {
 			this.num_jugadores++;
 		}
 		else {
-			throw new Exception("Lorem ipsum");
+			throw new IllegalArgumentException("Número máximo de " + this.nombre + "s superado");
 		}
 	}
 	

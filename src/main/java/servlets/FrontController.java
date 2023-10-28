@@ -241,31 +241,29 @@ public class FrontController extends HttpServlet {
 
 	}
 
-	private String InsertJugador(HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
+	private String InsertJugador(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		String requestMethod = request.getMethod();
 
 		if (requestMethod == "GET") {
 			return "InsertarJugadorForm.jsp";
 		}
-
-		Jugador nuJugador = new Jugador();
-		nuJugador.setNombre(request.getParameter("nombre"));
-		nuJugador.setApellidos(request.getParameter("apellidos"));
-		nuJugador.setDni(request.getParameter("dni"));
-		nuJugador.setAlias(request.getParameter("alias"));
-
-		// get posicion
-		// Query query = em.createdNamedQuery("Posicion.getPosicionByName").setParameter("posicion", request.getParameter("posicion"));
-
-		// List<Posicion> pos = query.getResultList();
-
-
-
+		
+//		try {
 		try {
+			Jugador nuJugador = new Jugador();
+			nuJugador.setNombre(request.getParameter("nombre"));
+			nuJugador.setApellidos(request.getParameter("apellidos"));
+			nuJugador.setDni(request.getParameter("dni"));
+			nuJugador.setAlias(request.getParameter("alias"));
+
+//		} catch (IllegalArgumentException e) {
+//			response.getWriter().append(e.getMessage());
+//		}
+
 			ut.begin();
 			em.persist(nuJugador);
+			// get posicion
 			Posicion posicion = em.find(Posicion.class, request.getParameter("posicion"));
 			em.persist(posicion);
 			nuJugador.setPosicion(posicion);
@@ -275,12 +273,20 @@ public class FrontController extends HttpServlet {
 
 			return "Home.jsp";
 
-		} catch (Exception e) {
+		} catch (IllegalArgumentException e) {
 
-			response.getWriter().append("Shit, something went wrong" + e.getMessage());
+			System.out.print("Error al insertar jugador" + e.getMessage());
+			
+			request.setAttribute("error", e.getMessage());
+			
+			return "InsertarJugadorForm.jsp";
+
+		} catch (Exception e) {
 			System.out.print("Shit, something went wrong" + e.getMessage());
-			return null;
+			
+			throw (ServletException) e;
 		}
+		
 
 	}
 
