@@ -19,6 +19,7 @@ import javax.transaction.UserTransaction;
 
 import org.eclipse.persistence.exceptions.DatabaseException;
 
+//import entities.Artist;
 import entities.Jugador;
 import entities.Posicion;
 
@@ -89,7 +90,7 @@ public class FrontController extends HttpServlet {
 			break;
 
 		case "/ArtistDelete.html":
-			forwardToJSP = deleteArtist(request, response);
+			forwardToJSP = deleteJugador(request, response);
 			break;
 		}
 
@@ -128,30 +129,46 @@ public class FrontController extends HttpServlet {
 
 	}
 
-	private String deleteArtist(HttpServletRequest request, HttpServletResponse response) {
+	private String deleteJugador(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, DatabaseException {
 
-		int idArtist = Integer.parseInt(request.getParameter("artistId"));
+		String requestMethod = request.getMethod();
 
-		System.out.print("ID ARTIST:" + idArtist);
-
+		if (requestMethod == "GET") {
+			return "Home.jsp";
+		}
 		
 		try {
+			Jugador nuJugador = new Jugador();
+			
 			ut.begin();
-			// Artist toDeleteArtist = em.find(Artist.class, idArtist);
-//			request.setAttribute("message", "Successfully removed record "+toDeleteArtist.getName());
-//			System.out.print("ELIMINANDO..." + toDeleteArtist.getName());
-//			
-//			em.remove(toDeleteArtist);
-			ut.commit();
+			em.persist(nuJugador);
+			
+			Jugador toDeleteJugador = em.find(Jugador.class, request.getParameter("dni"));
+			// get posicion
+			Posicion posicion = em.find(Posicion.class, request.getParameter("posicion"));
+			em.persist(posicion);
+			nuJugador.setPosicion(posicion);
 
-			return "ArtistEditPage.jsp";
+			request.setAttribute("jugador", nuJugador);
+			
+			em.remove(toDeleteJugador);
+			ut.commit();
+			
+			
+			return "Home.jsp";
+
+		} catch (IllegalArgumentException e) {
+
+			System.out.print("Error al insertar jugador" + e.getMessage());
+			
+			request.setAttribute("error", e.getMessage());
+			
+			return "Home.jsp";
 
 		} catch (Exception e) {
-
+			System.out.print("Shit, something went wrong" + e.getMessage());
 			
-			request.setAttribute("message", "Error en deleteArtist()" + e.getMessage() + e.getCause());
-			
-			return "Error.jsp";
+			throw (ServletException) e;
 		}
 		
 		
