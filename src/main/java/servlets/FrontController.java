@@ -84,13 +84,12 @@ public class FrontController extends HttpServlet {
 
 		// UPDATE Y DELETE
 
-		case "/ArtistUpdate.html":
-
-			forwardToJSP = updateArtist(request, response);
+		case "/EditarJugador.html":
+			forwardToJSP = EditJugador(request, response);
 			break;
 
-		case "/ArtistDelete.html":
-			forwardToJSP = deleteJugador(request, response);
+		case "/DeleteJugador.html":
+			forwardToJSP = DeleteJugador(request, response);
 			break;
 		}
 
@@ -129,7 +128,7 @@ public class FrontController extends HttpServlet {
 
 	}
 
-	private String deleteJugador(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, DatabaseException {
+	private String DeleteJugador(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, DatabaseException {
 
 		String requestMethod = request.getMethod();
 
@@ -222,39 +221,54 @@ public class FrontController extends HttpServlet {
 
 	}
 
-	private String updateArtist(HttpServletRequest request, HttpServletResponse response) {
+	private String EditJugador(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, DatabaseException {
 
-		// En la request me debería venir la información del artista
+		String requestMethod = request.getMethod();
 
-		int idArtist = Integer.parseInt(request.getParameter("artistId"));
-
-		System.out.print("ID ARTIST:" + idArtist);
-
-		// Artist toUpdateArtist = em.find(Artist.class, idArtist);
-
-		String nuName = request.getParameter("name");
-		String nuDescription = request.getParameter("description");
-
+		if (requestMethod == "GET") {
+			return "EditarJugadorForm.jsp";
+		}
+		
+		// comprobar que no existe ya el jugador
+		if (em.find(Jugador.class, request.getParameter("dni")) != null) {
+			System.out.print("El jugador con DNI " + request.getParameter("dni") + " ya existe");
+			request.setAttribute("error", "El jugador con DNI " + request.getParameter("dni") + " ya existe");
+			
+			return "EditarJugadorForm.jsp";
+		}
 
 		try {
+			Jugador upJugador = new Jugador();
+			upJugador.setDni(request.getParameter("dni"));
+			upJugador.setNombre(request.getParameter("nombre"));
+			upJugador.setApellidos(request.getParameter("apellidos"));
+			upJugador.setAlias(request.getParameter("alias"));
+			
 			ut.begin();
+			
+			em.merge(upJugador);
+			
+			//get posicion
+			Posicion posicion = em.find(Posicion.class, request.getParameter("posicion"));
+			em.merge(posicion);
+			upJugador.setPosicion(posicion);
 
-//			toUpdateArtist.setName(nuName);
-//			toUpdateArtist.setDescription(nuDescription);
-//			toUpdateArtist.setFollowers(nuFollowers);
-//			em.merge(toUpdateArtist);
+			request.setAttribute("jugador", upJugador);
 			ut.commit();
+			return "Home.jsp";
 
-//			request.setAttribute("artist", toUpdateArtist);
+		} catch (IllegalArgumentException e) {
 
-			request.setAttribute("message", "Successfully updated record.");
+			System.out.print("Error al insertar jugador" + e.getMessage());
 			
+			request.setAttribute("error", e.getMessage());
 			
-			return "ArtistEditPage.html";
+			return "EditarJugadorForm.jsp";
 
 		} catch (Exception e) {
-
-			return "Error.jsp";
+			System.out.print("Shit, something went wrong" + e.getMessage());
+			
+			throw (ServletException) e;
 		}
 
 	}

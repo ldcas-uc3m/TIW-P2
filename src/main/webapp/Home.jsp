@@ -71,8 +71,8 @@
 	       		
 	       		|
 	     
-	       		<a href="EditarJugadorPage.html?id=<%= j.getDni() %>">Editar</a>
-	       		<a href="EliminarJugador.html?id=<%= j.getDni() %>">Eliminar</a>
+	       		<a href="EditarJugadorForm.jsp?id=<%= j.getDni() %>">Editar</a>
+	       		<a href="EliminarJugadorForm.jsp?id=<%= j.getDni() %>">Eliminar</a>
 	      	</li>
 	    <%
 	    }
