@@ -1,6 +1,6 @@
-# Lab: Name
-By Luis Daniel Casais Mezquida  
-Subject 2X/2Y  
+# Práctica 2: Plantilla de un equipo de fútbol con aceso a base de datos
+By Luis Daniel Casais Mezquida, Pablo Montero Poyatos, Javier Moreno Yébenes & Alberto Urbano Ballesteros  
+Tecnologías informáticas para la web 23/24  
 Bachelor's Degree in Computer Science and Engineering  
 Universidad Carlos III de Madrid
 
