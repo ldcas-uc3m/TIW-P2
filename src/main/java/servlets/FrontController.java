@@ -144,21 +144,20 @@ public class FrontController extends HttpServlet {
 		}
 		
 		// comprobar que existe el jugador
-		if (em.find(Jugador.class, request.getParameter("dni")) == null) {
-			System.out.print("El jugador con DNI " + request.getParameter("dni") + " no existe");
-			request.setAttribute("error", "El jugador con DNI " + request.getParameter("dni") + " no existe");
+		if (em.find(Jugador.class, request.getParameter("id")) == null) {
+			System.out.print("El jugador con DNI " + request.getParameter("id") + " no existe");
+			request.setAttribute("error", "El jugador con DNI " + request.getParameter("id") + " no existe");
 			
 			return "EditarJugadorForm.jsp";
 		}
 
 		try {
-			Jugador upJugador = em.find(Jugador.class, request.getParameter("dni"));
+			Jugador upJugador = em.find(Jugador.class, request.getParameter("id"));
 
 			ut.begin();
 
 			em.persist(upJugador);
 
-			upJugador.setDni(request.getParameter("dni"));
 			upJugador.setNombre(request.getParameter("nombre"));
 			upJugador.setApellidos(request.getParameter("apellidos"));
 			upJugador.setAlias(request.getParameter("alias"));

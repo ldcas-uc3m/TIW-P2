@@ -39,14 +39,13 @@
 
 		<article>
 			<form action="EditarJugador.html" method="post">
+				<p>DNI: <%= request.getAttribute("id").toString() %></p><br/>
 				<label for="f_nombre"> Nombre:</label><br/>
 				  <input type="text" name="nombre" /><br/>
 				<label for="f_apellidos"> Apellidos:</label><br/>
 				  <input type="text" name="apellidos" /><br/>
 				<label for="f_apodo"> Apodo:</label><br/>
 				  <input type="text" name="apodo" /><br/>
-				<label for="f_dni"> DNI:</label><br/>
-        			<input type="text" name="dni" /><br/>
 				<label for="f_posicion"> Posicion:</label><br/>
 				    <select name="posicion">
 						<%
