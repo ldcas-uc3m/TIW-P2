@@ -32,6 +32,7 @@ public class Jugador implements Serializable {
 
 	public Jugador() { }
 
+
 	public String getDni() {
 		return this.dni;
 	}
@@ -45,6 +46,7 @@ public class Jugador implements Serializable {
 		this.dni = dni;
 	}
 
+
 	public String getNombre() {
 		return this.nombre;
 	}
@@ -56,6 +58,7 @@ public class Jugador implements Serializable {
 
 		this.nombre = nombre;
 	}
+
 
 	public String getApellidos() {
 		return this.apellidos;
@@ -69,6 +72,7 @@ public class Jugador implements Serializable {
 		this.apellidos = apellidos;
 	}
 
+
 	public String getAlias() {
 		return this.alias;
 	}
@@ -76,6 +80,7 @@ public class Jugador implements Serializable {
 	public void setAlias(String alias) {
 		this.alias = alias;
 	}
+
 
 	public String getPosicion() {
 		return this.posicion.getNombre();

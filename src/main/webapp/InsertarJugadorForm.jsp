@@ -48,27 +48,25 @@
         			<input type="text" name="dni" /><br/>
 				<label for="f_posicion"> Posicion:</label><br/>
 				    <select name="posicion">
-					<%
-					// get posiciones
-					EntityManagerFactory factory = Persistence.createEntityManagerFactory("PU");
-					EntityManager em = factory.createEntityManager();
-					
-					Query query = em.createNamedQuery("Posicion.getPosiciones");
-					
-					List<Posicion> posiciones = query.getResultList();
-	
-						// TODO: ver numero de posiciones y mostrar conforme a eso
-					
-					for (Posicion p : posiciones) {
-						System.out.print(p.getNumJugadores());
-						if (p.isMax()) continue;
+						<%
+						// get posiciones
+						EntityManagerFactory factory = Persistence.createEntityManagerFactory("PU");
+						EntityManager em = factory.createEntityManager();
 						
-					%>
-						<option value="<%= p.getNombre() %>"><%= p.getNombre() %></option>
-					<%
-					}
-					em.close();
-					%>
+						Query query = em.createNamedQuery("Posicion.getPosiciones");
+						
+						List<Posicion> posiciones = query.getResultList();
+						
+						for (Posicion p : posiciones) {
+							System.out.print(p.getNumJugadores());
+							if (p.isMax()) continue;
+							
+						%>
+							<option value="<%= p.getNombre() %>"><%= p.getNombre() %></option>
+						<%
+						}
+						em.close();
+						%>
 					</select>
 
         		<input type="submit" value="Submit" />

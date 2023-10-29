@@ -30,6 +30,7 @@
 		EntityManager em = factory.createEntityManager();
     	%>
     	
+		<!-- Posiciones -->
     	<p>
     		| 
 	    	<%

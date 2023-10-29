@@ -11,7 +11,6 @@ import javax.persistence.*;
 @Entity
 @Table(name="posiciones")
 @NamedQuery(name="Posicion.getPosiciones", query="SELECT p FROM Posicion p")
-// @NamedQuery(name="Posicion.getPosicionByName", query="SELECT p FROM Posicion p WHERE p.name LIKE :posicion")
 public class Posicion implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -21,7 +20,9 @@ public class Posicion implements Serializable {
 	private int max_jugadores;
 	private int num_jugadores;
 
+
 	public Posicion() { }
+
 
 	public String getNombre() {
 		return this.nombre;
@@ -35,17 +36,25 @@ public class Posicion implements Serializable {
 		return this.num_jugadores;
 	}
 
+
+	public boolean isMax() {
+		return (this.num_jugadores >= this.max_jugadores);
+	}
+
 	public void addJugador() throws IllegalArgumentException {
-		if (this.num_jugadores < this.max_jugadores) {
-			this.num_jugadores++;
-		}
-		else {
+		if (this.isMax()) {
 			throw new IllegalArgumentException("Número máximo de " + this.nombre + "s superado");
 		}
+
+		this.num_jugadores++;
 	}
 	
-	public boolean isMax() {
-		return (this.num_jugadores == this.max_jugadores);
+	public void removeJugador() throws IllegalArgumentException {
+		if (this.num_jugadores <= 0) {
+			throw new IllegalArgumentException("Número mínimo de " + this.nombre + "s superado");
+		}
+
+		this.num_jugadores--;
 	}
 
 }
