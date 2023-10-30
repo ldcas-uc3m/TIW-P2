@@ -35,35 +35,55 @@
 			<p>Error: <%= request.getAttribute("error").toString() %></p>
 		<%
 		}
+		EntityManagerFactory factory = Persistence.createEntityManagerFactory("PU");
+		EntityManager em = factory.createEntityManager();
+		
+		Jugador j = em.find(Jugador.class, request.getParameter("id"));
 		%>
-
+		
 		<article>
-			<form action="EditarJugador.html" method="post">
-				<p>DNI: <%= request.getAttribute("id").toString() %></p><br/>
+			<form action="EditarJugador.html?id=<%= request.getParameter("id") %>" method="post">
+				<p>DNI: <%= request.getParameter("id") %></p><br/>
 				<label for="f_nombre"> Nombre:</label><br/>
-				  <input type="text" name="nombre" /><br/>
+				  <input type="text" name="nombre"  value=<%= j.getNombre() %>><br/>
 				<label for="f_apellidos"> Apellidos:</label><br/>
-				  <input type="text" name="apellidos" /><br/>
+				  <input type="text" name="apellidos"  value=<%= j.getApellidos() %>><br/>
 				<label for="f_apodo"> Apodo:</label><br/>
-				  <input type="text" name="apodo" /><br/>
+				  <%
+				  if (j.getAlias() == null) {
+				  %>
+				  	<input type="text" name="apodo" /><br/>
+			  	  <%
+				  } else {
+				  %>
+				    <input type="text" name="apodo"  value=<%= j.getAlias() %>><br/>
+				  <%
+				  }
+				  %>
 				<label for="f_posicion"> Posicion:</label><br/>
 				    <select name="posicion">
 						<%
 						// get posiciones
-						EntityManagerFactory factory = Persistence.createEntityManagerFactory("PU");
-						EntityManager em = factory.createEntityManager();
 						
 						Query query = em.createNamedQuery("Posicion.getPosiciones");
 						
 						List<Posicion> posiciones = query.getResultList();
-		
+						
+						
 						for (Posicion p : posiciones) {
-							System.out.print(p.getNumJugadores());
-							if (p.isMax()) continue;
 							
-						%>
-							<option value="<%= p.getNombre() %>"><%= p.getNombre() %></option>
-						<%
+							// leave player's position as the selected one
+							if (p.getNombre() == j.getPosicion()) {
+							%>
+								<option value="<%= p.getNombre() %>" selected><%= p.getNombre() %></option>
+							<%
+							}
+							else if (p.isMax()) continue;
+							else {
+							%>
+								<option value="<%= p.getNombre() %>"><%= p.getNombre() %></option>
+							<%
+							}
 						}
 						em.close();
 						%>

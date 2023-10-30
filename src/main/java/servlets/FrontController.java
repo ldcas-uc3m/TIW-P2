@@ -48,11 +48,11 @@ public class FrontController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String forwardToJSP = "Error.jsp";
+		String forwardToJSP;
 
 		// EXTRAEMOS EL FRAGMENTO DE URL DE LA PETICIÓN REALIZADA POR EL CLIENTE
 		String pathAskedFor = request.getServletPath();
-		System.out.print("Front Controller --> PATH REQUESTED: " + pathAskedFor + " REQUEST METHOD :"
+		System.out.print("Front Controller --> PATH REQUESTED: " + pathAskedFor + " REQUEST METHOD: "
 				+ request.getMethod());
 
 
@@ -73,9 +73,14 @@ public class FrontController extends HttpServlet {
 				forwardToJSP = EditJugador(request, response);
 				break;
 
-			case "/DeleteJugador.html":
+			case "/EliminarJugador.html":
 				forwardToJSP = DeleteJugador(request, response);
 				break;
+			
+			default:
+				forwardToJSP = "Error.jsp";
+				System.out.print(pathAskedFor + "not found");
+				request.setAttribute("message", pathAskedFor + "not found");
 		}
 
 		// Forward a una jsp para mostrar el resultado de la operación
@@ -91,29 +96,22 @@ public class FrontController extends HttpServlet {
 
 
 	private String DeleteJugador(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, DatabaseException {
-
-		String requestMethod = request.getMethod();
-
-		if (requestMethod == "GET") {
-			return "Home.jsp";
-		}
 		
 		try {
 			
-			// search jugador
-			Jugador toDeleteJugador = em.find(Jugador.class, request.getParameter("id"));
-			
 			ut.begin();
 
+			// search jugador
+			Jugador toDeleteJugador = em.find(Jugador.class, request.getParameter("id"));			
+
 			// delete jugador
-			em.merge(toDeleteJugador);
 			em.remove(toDeleteJugador);
 
 			// update posicion
 			Posicion posicion = em.find(Posicion.class, toDeleteJugador.getPosicion());
 			em.persist(posicion);
 			posicion.removeJugador();
-
+			
 			ut.commit();
 
 			return "Home.jsp";
@@ -143,6 +141,8 @@ public class FrontController extends HttpServlet {
 			return "EditarJugadorForm.jsp";
 		}
 		
+		System.out.print(request.getParameter("id"));
+		
 		// comprobar que existe el jugador
 		if (em.find(Jugador.class, request.getParameter("id")) == null) {
 			System.out.print("El jugador con DNI " + request.getParameter("id") + " no existe");
@@ -152,15 +152,17 @@ public class FrontController extends HttpServlet {
 		}
 
 		try {
-			Jugador upJugador = em.find(Jugador.class, request.getParameter("id"));
-
 			ut.begin();
+
+			Jugador upJugador = em.find(Jugador.class, request.getParameter("id"));
 
 			em.persist(upJugador);
 
 			upJugador.setNombre(request.getParameter("nombre"));
 			upJugador.setApellidos(request.getParameter("apellidos"));
-			upJugador.setAlias(request.getParameter("alias"));
+			
+			if (request.getParameter("apodo") != null) 
+				upJugador.setAlias(request.getParameter("apodo"));
 
 			// update posicion
 			if (upJugador.getPosicion() != request.getParameter("posicion")) {  // pos was changed
@@ -171,7 +173,7 @@ public class FrontController extends HttpServlet {
 				em.persist(new_posicion);
 
 				old_posicion.removeJugador();
-				new_posicion.addJugador();
+				upJugador.setPosicion(new_posicion);
 			}
 
 			ut.commit();

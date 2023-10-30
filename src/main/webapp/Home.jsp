@@ -56,13 +56,12 @@
 		List<Jugador> jugadores = query_jug.getResultList();
 		
 	    
-		int i = 0;
 	    for (Jugador j : jugadores) {
 	   	%>
 	   		<li>
 	   			[<%= j.getPosicion() %>] <%= j.getNombre() %> 
 		   		<%
-		   		if (j.getAlias() != null) {
+		   		if (j.getAlias() != null && j.getAlias().length() > 0) {
 	   			%>
 	   				"<%= j.getAlias() %>"
 		   		<%
@@ -73,7 +72,7 @@
 	       		|
 	     
 	       		<a href="EditarJugadorForm.jsp?id=<%= j.getDni() %>">Editar</a>
-	       		<a href="EliminarJugadorForm.jsp?id=<%= j.getDni() %>">Eliminar</a>
+	       		<a href="EliminarJugador.html?id=<%= j.getDni() %>">Eliminar</a>
 	      	</li>
 	    <%
 	    }

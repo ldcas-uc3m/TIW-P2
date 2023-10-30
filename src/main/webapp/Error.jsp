@@ -19,10 +19,9 @@
         <h2>Error page</h2>
 
         <%
-        if(exception != null) {
+        if (exception != null) {
         %>
-            <%= exception.getClass() %>
-            <%= exception.getMessage() %>
+            <%= exception.getClass() %>: <%= exception.getMessage() %>
         <%
         }
         %>
@@ -34,7 +33,7 @@
         <%
         }
         %>
-
+		
         <%= request.getAttribute("message") %>
 
 
