@@ -41,30 +41,31 @@ Archivo encargado de crear las tablas de la base de datos con todas sus especifi
 # WebApp (`webapp/`)
 Dividido en los diferentes **JavaServer Pages** y la carpeta de hojas de estilo posible.
 
-## `index.jsp`
+## `Home.jsp`
 La página principal donde el usuario accede a la aplicación web.  
-En ella ya se presenta la posibilidad de añadir jugadores a la plantilla de fútbol en cuestión. Además, en ella misma será donde aparecerá el array con cada uno de los jugadores y los datos pertinentes de cada uno de ellos según se vayan añadiendo al equipo, acompañado de una lista visible de los jugadores que quedan por agregar de esa plantilla con los totales permitidos por cada posición.  
+En ella ya se presenta la posibilidad de añadir jugadores a la plantilla de fútbol en cuestión. Además, en ella misma será donde aparecerán las filas implementadas en las tablas de la base de datos de sql con cada uno de los jugadores y los datos pertinentes de cada uno de ellos según se vayan añadiendo al equipo, acompañado de una lista visible de los jugadores que quedan por agregar de esa plantilla con los totales permitidos por cada posición.  
 Junto a estos datos de cada jugador, aparecerá el botón para poder editar los datos de cada uno de ellos a gusto del usuario a la vez que poder eliminarlos de la base de datos.  
 Todo el resto de las páginas redirigen a esta al ser el punto de partida de la funcionalidad principal, siendo esta la de añadir nuevos jugadores.
 
-## `AñadirJugador.jsp`
-La página desde la cual se pueden agregar los nuevos jugadores a la plantilla. Sigue una estructura basada en los datos que hay que incluir de cada uno de los jugadores para su correcto almacenamiento en el array, presentando los campos nombre, apellidos, DNI (con formato modificado), alias y posición, donde exclusivamente se pueden seleccionar delantero, defensa, medio y portero.  
-Su conexión con `AñadirJugadorServlet/` y la _Bean_ `Jugador.java` permite mostrar por pantalla los errores pertinentes si no se cumple uno de los requisitos en cuestión dentro del formulario. Además, existe la opción de cancelar la operación y así volver a la página principal sin haber realizado ninguna agreagación a la base de datos.
+## `InsertarJugadorForm.jsp`
+La página desde la cual se pueden agregar los nuevos jugadores a la plantilla. Sigue una estructura basada en los datos que hay que incluir de cada uno de los jugadores para su correcto almacenamiento en formato fila dentro de la tabla de jugadores de sql, presentando los campos nombre, apellidos, DNI (con formato modificado), alias y posición, donde exclusivamente se pueden seleccionar delantero, defensa, medio y portero.  
 
-## `EditarJugador.jsp`
-La página que permite al usuario modificar al jugador que se haya seleccionado desde el array principal del index.  
-Presenta la misma estructura que el formulario para añadir a los jugadores con cada uno de sus subapartados y el botón para poder guardar los cambios realizados. Ésta es una de las funcionalidades que no son estrictamente necesarias o solicitadas en el enunciado de la práctica, pero para futuros trabajos y actualizaciones sobre esta aplicación web se entiende que será necesaria y de ahí su implementación extraordinaria.  
+## `EditarJugadorForm.jsp`
+La página que permite al usuario modificar al jugador que se haya seleccionado desde cada una de las filas insertadas de la página  'home'. Presenta la misma estructura que el formulario para añadir a los jugadores con cada uno de sus subapartados y el botón para poder guardar los cambios realizados. Ésta es una de las funcionalidades que no son estrictamente necesarias o solicitadas en el enunciado de la práctica, pero para futuros trabajos y actualizaciones sobre esta aplicación web se entiende que será necesaria y de ahí su implementación extraordinaria.  
 Además, existe la opción de cancelar la operación y así volver a la página principal sin haber realizado ninguna modificación en los jugadores existentes en la base de datos.
 
 
-## `ErrorPage.jsp`
+## `Error.jsp`
 Esta página, como su propio nombre indica, es la destinada a mostrar errores y permitir lanzar los **mensajes de error** y **excepciones pertinentes**. Además, se incluye un botón que permite volver a la página principal para poder seguir navegando si es que ya estabas dentro de la propia aplicación cuando el error dió lugar.
+
+## `Header.jsp y Footer.jsp`
+Estas páginas, como su propio nombre indican, conforman el cabecero y el pie de página de cada una de las páginas de las que se compone la página web, incluyendo títulos e imágenes 
 
 
 # Conclusiones
-La realización de esta práctica a pesar de no suponer una gran dificultad en primera instancia ha sido muy constructiva, ya que es el primer contacto directo con un proyecto de este tipo y en el cual se tratan muchas cosas nuevas (especialmente en la conexión a servidores como de java) al igual que se repasan otras tantas como el trabajo con html y las hojas de estilos. Siendo estas ultimas algo fundamental ya que se trata de la cara del producto la cara del producto y la aplicación web que se quiere dar a conocer.
+La realización de esta segunda parte de la primera práctica ha supuesto más problemas que la primera parte que la compone. La mayor dificultad encontrada puede haber sido el ser consciente de las conexiones entre los formularios para insertar y editar nuevos jugadores junto con los Front Controllers y tener control de las consultas sql con las que se trabajaban.
 
-Ha sido cuanto menos interesante la utilización primeriza de Eclipse y Payara para establecer las bases en las que el proyecto se desarrolla (servidores, HTML, CSS...) ya que nos da un enfoque más profesional de la forma de trabajar del mercado laboral. 
+Ha sido cuanto menos interesante la utilización primeriza de Eclipse y Payara para establecer las bases en las que el proyecto se desarrolla (servidores, HTML, CSS...) ya que nos da un enfoque más profesional de la forma de trabajar del mercado laboral a pesar de todas las dificultades y herramientas algo rudimentarias o no optimizadas que presenta este entorno de desarrollo. A todo esto se suma el repaso respecto al manejo de tablas y consultas de sql visto en proyectos o trabajos anteriores y que abarca un gran campo dentro de nuestros posibles futuros laborales.
 
-Como conclusiones finales, cabe resaltar el interés que tenemos sobre como se pueden unir este tipo de recursos y herramientas con el resto que se han comentado en las clases para, de esta manera, acabar con un trabajo de mucha mayor escala y aplicable a problemas reales.
+Como conclusiones finales, cabe resaltar el interés que tenemos sobre como se pueden unir este tipo de recursos y herramientas con el resto que se han comentado en las clases para, de esta manera, acabar con un trabajo de mucha mayor escala y aplicable a problemas reales con bases de datos a gran escala.
 
