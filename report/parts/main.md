@@ -2,57 +2,41 @@
 
 La aplicación web realizada está basada en la posibilidad de agregar, editar y eliminar jugadores que podrían formar parte de la plantillas de los clubes más prestigiosos de España (eg: Atlético de Madrid, _er_ Beti, Rayo Vallecano, F.C. Barcelona... etc). Esta vez la gestión de la plantilla de jugadores queda almacenada en bases de datos basadas en el uso tanto de JPA como de JDBC.
 
-La estructura principal que sigue el proyecto (carpeta `src/main/`) se divide en dos, una sección relacionada a la programación en **Java** (`java/`) y otra a cargo de las **WebApp** (`webapp/`). Respecto a la parte de **Java** es principalmente donde se incluyen los servlets, beans y utils. Por otro lado el **WebApp** es donde aparecen los archivos JavaServer Pages (los que permiten dar el formato HTML a nuestra web) junto a una hoja de estilos (`styles/style.css`) para poder editar fuentes y todo lo relacionado con la apariencia de la aplicación web en posibles actualizaciones.  
+La estructura principal que sigue el proyecto (carpeta `src/main/`) se divide en dos, una sección relacionada a la programación en **Java** (`java/`) y otra a cargo de las **WebApp** (`webapp/`). Respecto a la parte de **Java** es principalmente donde se incluyen los servlets, entities, utils y el archivo .sql que crea la base de datos con su formato de tablas. Por otro lado el **WebApp** es donde aparecen los archivos JavaServer Pages (los que permiten dar el formato HTML a nuestra web) junto a una hoja de estilos (`styles/style.css`) para poder editar fuentes y todo lo relacionado con la apariencia de la aplicación web en posibles actualizaciones.  
 
 # Java
-Dividido en tres carpetas principales (`beans/`, `servlets/` y `utils/`) con sus respectivos archivos y divisiones. Es la carpeta madre de todos los archivos Java del proyecto.
+Dividido en tres carpetas principales (`entities/`, `servlets/` , `utils/` y `db_create.sql`) con sus respectivos archivos y divisiones. Es la carpeta madre de todos los archivos Java del proyecto.
 
-## Beans (`beans/`)
+## Entities (`entities/`)
 Incluye los objetos que serán usados.
 
 ### Jugador (`Jugador.java`)
-Se trata del archivo donde se define el objeto `Jugador` y se comprueba si los valores intruducidos al constructor son correctos (no hay campos vacíos) y se llama al validador del DNI para comprobar si este es correcto.  
-Los atributos, todos strings, son `nombre`, `apellidos`, `dni`, `alias` y `posición`.
 
 ### Posiciones (`Posiciones.java`)
-Se trata del archivo donde se define el objeto `Posiciones` y se definen estas mismas.  
-El archivo comienza definiendo el numero inicial en cada posición que obviamente es 0 ya que la base de datos está vacia, y el número máximo de jugadores por posición.  
-Se definen los métodos que añaden y borran jugadores con sus correspondiente gestión de errores (más judadores de la cuenta, posiciones no reconocidas o número negativo).  
-Cuenta con un _Enum_ `Posicion` el cual se encarga de validar que las posiciones sean las correctas.  
-Los atributos, todos ints, son `numDelanteros`, `numDefensas`, `numMedios`, `numPorteros`, `maxDelanteros`, `maxDefensas` y `maxMedios`, `maxPorteros`.
+
+### PosicionesJDBC (`PosicionesJDBC.java`)
+
+### JugadorJDBC (`JugadorJDBC.java`)
 
 ## Servlets (`servlets/`)
 Carpeta conteniente de todos los archivos Java en relación a los servlets que nuestra aplicación utiliza.  
-Destacar la importancia del _ServletContext_, que el es encargado de mantener la consistencia entre todos los servlets y es el encargado de almacenar datos cuando por ejemplo un jugador se edita entre otras. Este servlet es la interfaz entre todos ellos y el que permite el correcto funcionamiento de los servicios que proveen.
+Destacar la importancia del _ServletContext_, que el es encargado de mantener la consistencia entre todos los servlets y es el encargado de almacenar datos cuando por ejemplo un jugador se edita entre otras. Este servlet es la interfaz entre todos ellos y el que permite el correcto funcionamiento de los servicios que proveen. En este caso los servlets principales son el FrontController y el FrontControllerJDBC, cada uno de ellos encargado de almacenar los datos introducidos en cada base de datos que corresponda (tanto con JSP como con JDBC)
 
-### AñadirJugadorServlet (`AñadirJugadorServlet.java`)
-Archivo en el que se define el servet encargado de añadir un jugador a la base de datos. Este servlet actualiza los valores de las posiciones y introduce a la base de datos la información introducida por el usuario.  
-Para realizar este cometido se añade a la base de datos utilizando el método `append()` (ya que es un str), se sobrescribe en el _ServletContext_ con `setAttribute()`, por último redirigimos al usuario con la correspondiente gestión de errores.  
-Tanto este como el formulario de editar jugador hacen uso de la request tipo POST.
-
-### EditarJugadorServlet (`EditarJugadorServlet.java`)
-Archivo en el que se define el servet encargado de modificar la información de un jugador a la base de datos. Este servlet modifica en la base de datos la información introducida por el usuario.  
-Con el índice del jugador (que es al fin y al cabo la forma de localizarlo) se actualiza en la base de datos utilizando el metodo `set()`,se sobrescribe en el _ServletContext_ con `setAttribute()`, por último redirigimos al usuario a la pagina principal (`index.jsp`) con la correspondiente gestión de errores.  
-Tanto este como el formulario de añadir jugador hacen uso de la request tipo POST.
+### FrontController (`FrontController.java`)
 
 
-### EliminarJugadorServlet (`EliminarJugadorServlet.java`)
-Archivo en el que se define el servet encargado de borrar un jugador de la base de datos. Este servlet actualiza los valores de las posiciones y elimina de la base de datos la información introducida por el usuario.  
-Este formulario hace uso de la request tipo GET.
+### FrontControllerJDBC (`FrontControllerJDBC.java`)
 
 
 ## Utils (`utils/`)
 Contiene funcionalidades genéricas que pueden ser utilizadas una o varias veces en un proyecto y que es mejor encapsular para la simplicidad y escalado del proyecto
 
-### CreateDBServlet (`CreateDBServlet.java`)
-Archivo encargado de la gestión que implica crear la base de datos de cero. Importa numerosas funcionalidades de `javax.servlet` ya que muchas de las funciones de estos están estrechamente relacionadas a la base de datos.  
-Es relevante destacar que en este caso la base de datos se trata simplemente de un string en el que almacenamos los datos y no una base de datos al uso por tanto siempre que se mencione la misma nos referiremos a esta forma de almacenamiento.
-
 ### ValidadorDNI (`ValidadorDNI.java`)
 Archivo encargado de validar un valor que se introduce como DNI comprobando que la letra es correcta y coincide con el número correspondiente o sea un dni que no exista.  
 Para esta funcionalidad se utiliza una expresion regular (regex).
 
-
+## db_creator (`db_creator.sql`)
+Archivo encargado de crear las tablas de la base de datos con todas sus especificaciones y requisitos 
 
 # WebApp (`webapp/`)
 Dividido en los diferentes **JavaServer Pages** y la carpeta de hojas de estilo posible.
