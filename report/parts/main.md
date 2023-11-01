@@ -20,12 +20,12 @@ Incluye los objetos que serán usados.
 
 ## Servlets (`servlets/`)
 Carpeta conteniente de todos los archivos Java en relación a los servlets que nuestra aplicación utiliza.  
-Destacar la importancia del _ServletContext_, que el es encargado de mantener la consistencia entre todos los servlets y es el encargado de almacenar datos cuando por ejemplo un jugador se edita entre otras. Este servlet es la interfaz entre todos ellos y el que permite el correcto funcionamiento de los servicios que proveen. En este caso los servlets principales son el FrontController y el FrontControllerJDBC, cada uno de ellos encargado de almacenar los datos introducidos en cada base de datos que corresponda (tanto con JSP como con JDBC)
+Destacar la importancia del _ServletContext_, que el es encargado de mantener la consistencia entre todos los servlets y es el encargado de almacenar datos cuando por ejemplo un jugador se edita entre otras. Este servlet es la interfaz entre todos ellos y el que permite el correcto funcionamiento de los servicios que proveen. En este caso los servlets principales son el JPAServlet y el JDBCServlet, los cuales actúan como FrontControllers propios de ellos mismos, cada uno de ellos encargado de almacenar los datos introducidos en cada base de datos que corresponda (tanto con JSP como con JDBC)
 
-### FrontController (`FrontController.java`)
+### JPAServlet (`JPAServlet.java`)
 
 
-### FrontControllerJDBC (`FrontControllerJDBC.java`)
+### JDBCServlet (`JDBCServlet.java`)
 
 
 ## Utils (`utils/`)
