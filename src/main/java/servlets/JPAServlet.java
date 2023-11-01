@@ -5,7 +5,6 @@ import java.io.IOException;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -22,11 +21,10 @@ import entities.Jugador;
 import entities.Posicion;
 
 
-
-@WebServlet("/JPAServlet")
+@WebServlet(urlPatterns = { "*.html" })
 public class JPAServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
+
 	@PersistenceContext(unitName = "PU")
 	private EntityManager em;
 	@Resource
@@ -41,15 +39,15 @@ public class JPAServlet extends HttpServlet {
 		context = config.getServletContext();
 	}
 
-    public JPAServlet() {
-        super();
-    }
 
-	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-		
+	public JPAServlet() {
+		super();
+	}
+
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 		String forwardToJSP;
 
 		// EXTRAEMOS EL FRAGMENTO DE URL DE LA PETICIÓN REALIZADA POR EL CLIENTE
@@ -59,15 +57,15 @@ public class JPAServlet extends HttpServlet {
 
 
 		// Realizamos diferentes acciones dependiendo de la url a la que se realiza la petición.
-		// Cada "handler" devuelve un String que es el nombre de la jsp a redirigir.	
-		
+		// Cada "handler" devuelve un String que es el nombre de la jsp a redirigir.
+
 		switch (pathAskedFor) {
 
 			case "/index.html":
 				forwardToJSP = "Home.jsp";
 				break;
 
-			case "/InsertarJugador.html":			
+			case "/InsertarJugador.html":
 				forwardToJSP = InsertJugador(request, response);
 				break;
 
@@ -88,15 +86,14 @@ public class JPAServlet extends HttpServlet {
 		// Forward a una jsp para mostrar el resultado de la operación
 		context.getRequestDispatcher("/" + forwardToJSP).forward(request, response);
 
-	
 	}
 
 
-	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		doGet(request, response);
 	}
+
 
 	private String DeleteJugador(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, DatabaseException {
 		
@@ -251,5 +248,5 @@ public class JPAServlet extends HttpServlet {
 		
 
 	}
-	
+
 }
