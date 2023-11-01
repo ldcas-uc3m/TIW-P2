@@ -30,6 +30,10 @@ public class JDBCServlet extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
+		
+		// Después de guardar en la base de datos con JDBC
+		response.sendRedirect("Home.jsp");
+
 	}
 
 	

@@ -25,10 +25,12 @@
     	
     	<h2>Plantilla actual</h2>
     	
+    	
     	<%
     	EntityManagerFactory factory = Persistence.createEntityManagerFactory("PU");
 		EntityManager em = factory.createEntityManager();
     	%>
+    	
     	
 		<!-- Posiciones -->
     	<p>
