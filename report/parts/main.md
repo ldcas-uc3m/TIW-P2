@@ -1,14 +1,18 @@
 # Introducción
 
+La consiguiente práctica consistirá en una evolución de la aplicación desarrollada enla anterior entrega en la cual la información requerida se guardaba en una base de datos volátil consistente unicamente en una variable de cadena a la que accedían los servlets. Como pequeño recordatotio se volverá a definir los ebjetivos funcionales de la misma así como su estructura, que ha variado levemente respecto a la version anterior. 
+
 La aplicación web realizada está basada en la posibilidad de agregar, editar y eliminar jugadores que podrían formar parte de la plantillas de los clubes más prestigiosos de España (eg: Atlético de Madrid, _er_ Beti, Rayo Vallecano, F.C. Barcelona... etc). Esta vez la gestión de la plantilla de jugadores queda almacenada en bases de datos basadas en el uso tanto de JPA como de JDBC.
 
-La estructura principal que sigue el proyecto (carpeta `src/main/`) se divide en dos, una sección relacionada a la programación en **Java** (`java/`) y otra a cargo de las **WebApp** (`webapp/`). Respecto a la parte de **Java** es principalmente donde se incluyen los servlets, beans y utils. Por otro lado el **WebApp** es donde aparecen los archivos JavaServer Pages (los que permiten dar el formato HTML a nuestra web) junto a una hoja de estilos (`styles/style.css`) para poder editar fuentes y todo lo relacionado con la apariencia de la aplicación web en posibles actualizaciones.  
+La estructura principal que sigue el proyecto (carpeta `src/main/`) se divide en dos, una sección relacionada a la programación en **Java** (`java/`) y otra a cargo de las **WebApp** (`webapp/`). Respecto a la parte de **Java** es principalmente donde se incluyen los servlets, beans y utils además del sql encargado de crear la base de datos. Por otro lado el **WebApp** sigue siendo el más relacionado a la propia página web en sí y es el que más a cambiado respecto de la versión anterior, teniendo archivos jsp para distintas finalidades, como por ejemplo un "form" para editar el jugador y otro para insertarlo, un header y un footer o el home y la página de error. 
+
+Lo más detacable de esta segunda versión es la migración de nuestros datos a una base de datos real, montada en mySQL lo que nos permite una mejor gestion de los datos, menos manual y más intuitiva y escalable. 
 
 # Java
-Dividido en tres carpetas principales (`beans/`, `servlets/` y `utils/`) con sus respectivos archivos y divisiones. Es la carpeta madre de todos los archivos Java del proyecto.
+Dividido en tres carpetas principales (`entities/`, `servlets/` y `utils/`) con sus respectivos archivos y divisiones. Es la carpeta madre de todos los archivos Java del proyecto. La anterior carpeta beans desaparece
 
-## Beans (`beans/`)
-Incluye los objetos que serán usados.
+## Entities (`entities/`)
+Incluye los archivos java que representan a los jugadores y a las posiciones disponibles.
 
 ### Jugador (`Jugador.java`)
 Se trata del archivo donde se define el objeto `Jugador` y se comprueba si los valores intruducidos al constructor son correctos (no hay campos vacíos) y se llama al validador del DNI para comprobar si este es correcto.  
