@@ -15,76 +15,58 @@ Dividido en tres carpetas principales (`entities/`, `servlets/` y `utils/`) con 
 Incluye los archivos java que representan a los jugadores y a las posiciones disponibles.
 
 ### Jugador (`Jugador.java`)
-Se trata del archivo donde se define el objeto `Jugador` y se comprueba si los valores intruducidos al constructor son correctos (no hay campos vacíos) y se llama al validador del DNI para comprobar si este es correcto.  
-Los atributos, todos strings, son `nombre`, `apellidos`, `dni`, `alias` y `posición`.
+Se trata del archivo donde se define el objeto `Jugador` y se define el tipo de relación que va a tener dentro de la base de datos, en este caso es "many to one" (o n-1) lo que significa que vario jugadores pueden tener una posición (por ejemplo en un equipo hay varios mediocentros).  
+Los atributos, todos strings, son `nombre`, `apellidos`, `dni`, `alias` y `posición`. Además se definen los "getters" y los "setters" de todos sus atrivutos. 
 
-### Posiciones (`Posiciones.java`)
+### Posicion (`Posicion.java`)
 Se trata del archivo donde se define el objeto `Posiciones` y se definen estas mismas.  
-El archivo comienza definiendo el numero inicial en cada posición que obviamente es 0 ya que la base de datos está vacia, y el número máximo de jugadores por posición.  
-Se definen los métodos que añaden y borran jugadores con sus correspondiente gestión de errores (más judadores de la cuenta, posiciones no reconocidas o número negativo).  
-Cuenta con un _Enum_ `Posicion` el cual se encarga de validar que las posiciones sean las correctas.  
-Los atributos, todos ints, son `numDelanteros`, `numDefensas`, `numMedios`, `numPorteros`, `maxDelanteros`, `maxDefensas` y `maxMedios`, `maxPorteros`.
+El archivo comienza definiendo el numero máximo de cada posición junto a un "getter" del nombre de la posición como de el número máximo por posición o del número de jugagores actuales.  
+Se definen los métodos que añaden y borran jugadores con sus correspondiente gestión de errores (más judadores de la cuenta, posiciones no reconocidas o número negativos).  
+Se utiliza una función propia llamada "isMAx()" que checkea si una posición ya se encuentra en su máxima capacidad.
 
 ## Servlets (`servlets/`)
 Carpeta conteniente de todos los archivos Java en relación a los servlets que nuestra aplicación utiliza.  
 Destacar la importancia del _ServletContext_, que el es encargado de mantener la consistencia entre todos los servlets y es el encargado de almacenar datos cuando por ejemplo un jugador se edita entre otras. Este servlet es la interfaz entre todos ellos y el que permite el correcto funcionamiento de los servicios que proveen.
 
-### AñadirJugadorServlet (`AñadirJugadorServlet.java`)
-Archivo en el que se define el servet encargado de añadir un jugador a la base de datos. Este servlet actualiza los valores de las posiciones y introduce a la base de datos la información introducida por el usuario.  
-Para realizar este cometido se añade a la base de datos utilizando el método `append()` (ya que es un str), se sobrescribe en el _ServletContext_ con `setAttribute()`, por último redirigimos al usuario con la correspondiente gestión de errores.  
-Tanto este como el formulario de editar jugador hacen uso de la request tipo POST.
+### FrontController.java (`FrontController.java`)
+Se trata del controlador de la parte del frontend de nuestra aplicación, pose un servlet llaamdo "WebServlet" en el que se desarrollará toda la funcionalidad del archivo. En este archivo aparece el metodo doGet() que es el encargado de encaminar al usuario a la página o funcionalidad que desea (editar, insertar, home ...etc) y es el que utiliza el requestDispatcher() para ir realizando estas tareas usando JSP. 
 
-### EditarJugadorServlet (`EditarJugadorServlet.java`)
-Archivo en el que se define el servet encargado de modificar la información de un jugador a la base de datos. Este servlet modifica en la base de datos la información introducida por el usuario.  
-Con el índice del jugador (que es al fin y al cabo la forma de localizarlo) se actualiza en la base de datos utilizando el metodo `set()`,se sobrescribe en el _ServletContext_ con `setAttribute()`, por último redirigimos al usuario a la pagina principal (`index.jsp`) con la correspondiente gestión de errores.  
-Tanto este como el formulario de añadir jugador hacen uso de la request tipo POST.
-
-
-### EliminarJugadorServlet (`EliminarJugadorServlet.java`)
-Archivo en el que se define el servet encargado de borrar un jugador de la base de datos. Este servlet actualiza los valores de las posiciones y elimina de la base de datos la información introducida por el usuario.  
-Este formulario hace uso de la request tipo GET.
-
+Tiene al igual que todos los archivos gestión de errores(con sus correspondientes redirecciones) y la definición y implementación de editar, eliminar e insertar jugadores, teniendo acceso a la base de datos con la capacidad de modificarla de estas mismas maneras. Recordar que nuestro proyecto SQL está proncipalmente definido por dos tablas que son jugador y posición, con una realcion n-1.
 
 ## Utils (`utils/`)
-Contiene funcionalidades genéricas que pueden ser utilizadas una o varias veces en un proyecto y que es mejor encapsular para la simplicidad y escalado del proyecto
-
-### CreateDBServlet (`CreateDBServlet.java`)
-Archivo encargado de la gestión que implica crear la base de datos de cero. Importa numerosas funcionalidades de `javax.servlet` ya que muchas de las funciones de estos están estrechamente relacionadas a la base de datos.  
-Es relevante destacar que en este caso la base de datos se trata simplemente de un string en el que almacenamos los datos y no una base de datos al uso por tanto siempre que se mencione la misma nos referiremos a esta forma de almacenamiento.
+Contiene funcionalidades genéricas que pueden ser utilizadas una o varias veces en un proyecto y que es mejor encapsular para la simplicidad y escalado del proyecto.
 
 ### ValidadorDNI (`ValidadorDNI.java`)
 Archivo encargado de validar un valor que se introduce como DNI comprobando que la letra es correcta y coincide con el número correspondiente o sea un dni que no exista.  
 Para esta funcionalidad se utiliza una expresion regular (regex).
 
-
+## db_create.sql (` db_create.sql`)
+Como se mencionó en la introducción se trata de un archivo relacionado a la creación de la base de datos, y como se indica en su cabecera se trata de un archivo generado con MySQL Workbench que es la herramienta con la que estamos gestionando la base de datos 
 
 # WebApp (`webapp/`)
 Dividido en los diferentes **JavaServer Pages** y la carpeta de hojas de estilo posible.
 
-## `index.jsp`
-La página principal donde el usuario accede a la aplicación web.  
-En ella ya se presenta la posibilidad de añadir jugadores a la plantilla de fútbol en cuestión. Además, en ella misma será donde aparecerá el array con cada uno de los jugadores y los datos pertinentes de cada uno de ellos según se vayan añadiendo al equipo, acompañado de una lista visible de los jugadores que quedan por agregar de esa plantilla con los totales permitidos por cada posición.  
-Junto a estos datos de cada jugador, aparecerá el botón para poder editar los datos de cada uno de ellos a gusto del usuario a la vez que poder eliminarlos de la base de datos.  
-Todo el resto de las páginas redirigen a esta al ser el punto de partida de la funcionalidad principal, siendo esta la de añadir nuevos jugadores.
+## `EditarJugadorForm.jsp`
+Archivo JSP que despliega en la página web el formulario necesario para editar a aun jugador, dándo al ususario capacidad de acceso y modificación sobre la base de datos. Esta funcionalidad es tambien útil de cara a gestión de errores, no tanto de código si no puramente humanos, como inputs erroneos o inexactos que con esta funcionalidad pueden ser modificados.
 
-## `AñadirJugador.jsp`
-La página desde la cual se pueden agregar los nuevos jugadores a la plantilla. Sigue una estructura basada en los datos que hay que incluir de cada uno de los jugadores para su correcto almacenamiento en el array, presentando los campos nombre, apellidos, DNI (con formato modificado), alias y posición, donde exclusivamente se pueden seleccionar delantero, defensa, medio y portero.  
-Su conexión con `AñadirJugadorServlet/` y la _Bean_ `Jugador.java` permite mostrar por pantalla los errores pertinentes si no se cumple uno de los requisitos en cuestión dentro del formulario. Además, existe la opción de cancelar la operación y así volver a la página principal sin haber realizado ninguna agreagación a la base de datos.
+## `InsertarJugadorForm.jsp`
+Archivo JSP que despliega en la página web el formulario necesario para añadir a aun jugador, dándo al ususario capacidad de acceso y modificación sobre la base de datos al igual que la funciónalidad editar.
 
-## `EditarJugador.jsp`
-La página que permite al usuario modificar al jugador que se haya seleccionado desde el array principal del index.  
-Presenta la misma estructura que el formulario para añadir a los jugadores con cada uno de sus subapartados y el botón para poder guardar los cambios realizados. Ésta es una de las funcionalidades que no son estrictamente necesarias o solicitadas en el enunciado de la práctica, pero para futuros trabajos y actualizaciones sobre esta aplicación web se entiende que será necesaria y de ahí su implementación extraordinaria.  
-Además, existe la opción de cancelar la operación y así volver a la página principal sin haber realizado ninguna modificación en los jugadores existentes en la base de datos.
+## `Error.jsp`
+Se trata del JSP que implementa la página de error con el tipo de error y sus características indicando al usuario lo que ha pasado por medio de un mensaje.
 
+## `Header.jsp`
+Es un JSP que representa la cabecera de página de en este caso el Atlético de Madrid pero cuyo objetivo es ser "generalizado" para poder ser reutilizado en distintas páginas (ya sea de otros equipos o de distintas funcionalidades dentro de un mismo equipo).
 
-## `ErrorPage.jsp`
-Esta página, como su propio nombre indica, es la destinada a mostrar errores y permitir lanzar los **mensajes de error** y **excepciones pertinentes**. Además, se incluye un botón que permite volver a la página principal para poder seguir navegando si es que ya estabas dentro de la propia aplicación cuando el error dió lugar.
+## `Footer.jsp`
+Al igual que el archivo anterior un JSP que representa el footer de página y cuyo objetivo es ser "generalizado" para poder ser reutilizado en distintas páginas.
 
+## `Home.jsp`
+Se trata del JSP que representa y dibuja la página principal de bienvenida en la cual son accesibles todas las opciones que ofrece nustra aplicación para que el usuario las localice facilmente. Hace uso de tanto header como footer y llama a editar e insertar jugador.
 
 # Conclusiones
-La realización de esta práctica a pesar de no suponer una gran dificultad en primera instancia ha sido muy constructiva, ya que es el primer contacto directo con un proyecto de este tipo y en el cual se tratan muchas cosas nuevas (especialmente en la conexión a servidores como de java) al igual que se repasan otras tantas como el trabajo con html y las hojas de estilos. Siendo estas ultimas algo fundamental ya que se trata de la cara del producto la cara del producto y la aplicación web que se quiere dar a conocer.
+La realización de esta práctica ha supuesto un reto para el equipo y en ciertas ocasiones una ocasión perfecta para aprender a enfrentarnos a problemas reales que pueden aparecer en el desarrollo de una aplicación real de misma naturaleza. Creemos que el hecho de incluir una base de datos real y no un simple string nos ha ayudado a entender correctamente la forma en la que se trabaja en el mundo laboral con herramientas como MySQL workbench o los servidores Payara entre otras muchas cosas.
 
-Ha sido cuanto menos interesante la utilización primeriza de Eclipse y Payara para establecer las bases en las que el proyecto se desarrolla (servidores, HTML, CSS...) ya que nos da un enfoque más profesional de la forma de trabajar del mercado laboral. 
+Cabe destacar que el uso de archivos JDBC y JSP aun aumentando la dificultad de la práctica hace de nuestra aplicación un proyecto más consistente escalable y organizado y nos a proporcianado conocimientos muy útiles para el desarrollo de este tipo de herramientas.
 
-Como conclusiones finales, cabe resaltar el interés que tenemos sobre como se pueden unir este tipo de recursos y herramientas con el resto que se han comentado en las clases para, de esta manera, acabar con un trabajo de mucha mayor escala y aplicable a problemas reales.
-
+Destacar la dificultad añadida de las coincidencias con otros exámenes y proyectos que ha podido entorpecer el hecho de coincidir el equipo entero de desarrollo que en cambio ha sido capaz de sacar adelante el proyecto dividiendo el trabajo de forma eficiente y estando en constante contacto.
