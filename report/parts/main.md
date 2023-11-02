@@ -50,6 +50,7 @@ Dividido en los diferentes **JavaServer Pages** y la carpeta de hojas de estilo 
 Archivo JSP que despliega en la página web el formulario necesario para editar a aun jugador, dándo al ususario capacidad de acceso y modificación sobre la base de datos. Esta funcionalidad es tambien útil de cara a gestión de errores, no tanto de código si no puramente humanos, como inputs erroneos o inexactos que con esta funcionalidad pueden ser modificados.
 
 ## `InsertarJugadorForm.jsp`
+La página desde la cual se pueden agregar los nuevos jugadores a la plantilla. Sigue una estructura basada en los datos que hay que incluir de cada uno de los jugadores para su correcto almacenamiento en formato fila dentro de la tabla de jugadores de sql, presentando los campos nombre, apellidos, DNI (con formato modificado), alias y posición, donde exclusivamente se pueden seleccionar delantero, defensa, medio y portero.
 Archivo JSP que despliega en la página web el formulario necesario para añadir a aun jugador, dándo al ususario capacidad de acceso y modificación sobre la base de datos al igual que la funciónalidad editar.
 
 ## `Error.jsp`
@@ -62,8 +63,10 @@ Es un JSP que representa la cabecera de página de en este caso el Atlético de 
 Al igual que el archivo anterior un JSP que representa el footer de página y cuyo objetivo es ser "generalizado" para poder ser reutilizado en distintas páginas.
 
 ## `Home.jsp`
-Se trata del JSP que representa y dibuja la página principal de bienvenida en la cual son accesibles todas las opciones que ofrece nustra aplicación para que el usuario las localice facilmente. Hace uso de tanto header como footer y llama a editar e insertar jugador.
-
+La página principal donde el usuario accede a la aplicación web.
+En ella ya se presenta la posibilidad de añadir jugadores a la plantilla de fútbol en cuestión. Además, en ella misma será donde aparecerán las filas implementadas en las tablas de la base de datos de sql con cada uno de los jugadores y los datos pertinentes de cada uno de ellos según se vayan añadiendo al equipo, acompañado de una lista visible de los jugadores que quedan por agregar de esa plantilla con los totales permitidos por cada posición.
+Junto a estos datos de cada jugador, aparecerá el botón para poder editar los datos de cada uno de ellos a gusto del usuario a la vez que poder eliminarlos de la base de datos.
+Todo el resto de las páginas redirigen a esta al ser el punto de partida de la funcionalidad principal, siendo esta la de añadir nuevos jugadores.
 # Conclusiones
 La realización de esta práctica ha supuesto un reto para el equipo y en ciertas ocasiones una ocasión perfecta para aprender a enfrentarnos a problemas reales que pueden aparecer en el desarrollo de una aplicación real de misma naturaleza. Creemos que el hecho de incluir una base de datos real y no un simple string nos ha ayudado a entender correctamente la forma en la que se trabaja en el mundo laboral con herramientas como MySQL workbench o los servidores Payara entre otras muchas cosas.
 
