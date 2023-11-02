@@ -118,10 +118,22 @@ https://nexus.payara.fish/#browse/browse:payara-community:fish%2Fpayara%2Fdistri
 
 
 ## Ejecución
-En Eclipse:
-1. Importa el proyecto deseado desde `File` → `Open Projects From File System...` → `Directory` → <projecto deseado, e.g `<path-to>tiwclase1/`> → `Finish`.
-<!-- 2. [???] Conviértelo en un projecto JPA:
-    1. `Project` → `Properties` → `Project Facets`
-    2. Haz tick en la caja de JPA
-    3. A la derecha, pestaña `Runtimes`, y selecciona `Payara` -->
-3. Asegúrate de tener seleccionado el proyecto y haz clic en `Run` → `Run As` → `Run on Server` y selecciona tu servidor de Payara.
+- **En Eclipse:**
+    1. Importa el proyecto deseado desde `File` → `Open Projects From File System...` → `Directory` → <projecto deseado, e.g `<path-to>tiwclase1/`> → `Finish`.
+    2. Asegúrate de tener seleccionado el proyecto y haz clic en `Run` → `Run As` → `Run on Server` y selecciona tu servidor de Payara.
+
+- **A través de la línea de comandos:** Una vez exportado el archivo WAR (e instalado Java y Payara, y hecho el setup de MySQL y JDBC):
+    ```bash
+    JAVA_HOME=<path-to-java>
+    PAYARA_PATH=<path-to-payara>
+
+    sudo $PAYARA_PATH/bin/asadmin start-domain -d
+    sudo $PAYARA_PATH/bin/asadmin deploy TIW-P2-JDBC.war
+    ```
+
+    Recuerda que se te abrirá la aplicación en http://localhost:8080/TIW-P2-JDBC.
+
+    Para quitarlo usa:
+    ```bash
+    sudo $PAYARA_PATH/bin/asadmin undeploy TIW-P2-JDBC
+    ```

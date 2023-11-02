@@ -15,7 +15,7 @@ cp report/report.pdf .
 
 # zip it
 echo "Zipping..."
-zip -r $OUTFILE *.war report.pdf
+zip -r $OUTFILE *.war db_create.sql report.pdf
 
 # cleanup
 echo "Cleaning up..."
