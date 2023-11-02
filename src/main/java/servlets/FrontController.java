@@ -111,19 +111,6 @@ public class FrontController extends HttpServlet {
 	private String DeleteJugador(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		try {
-//			
-//			ut.begin();
-//
-//			// search jugador
-//			Jugador toDeleteJugador = em.find(Jugador.class, request.getParameter("id"));			
-//
-//			em.remove(toDeleteJugador);
-//
-//			Posicion posicion = em.find(Posicion.class, toDeleteJugador.getPosicion());
-//			em.persist(posicion);
-//			posicion.removeJugador();
-//			
-//			ut.commit();
 		
 			conn = ds.getConnection();
 			
@@ -183,65 +170,95 @@ public class FrontController extends HttpServlet {
 
 	private String EditJugador(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-//		String requestMethod = request.getMethod();
-//
-//		if (requestMethod == "GET") {
-//			return "EditarJugadorForm.jsp";
-//		}
-//		
-//		System.out.print(request.getParameter("id"));
-//		
-//		// comprobar que existe el jugador
-//		if (em.find(Jugador.class, request.getParameter("id")) == null) {
-//			System.out.print("El jugador con DNI " + request.getParameter("id") + " no existe");
-//			request.setAttribute("error", "El jugador con DNI " + request.getParameter("id") + " no existe");
-//			
-//			return "EditarJugadorForm.jsp";
-//		}
-//
-//		try {
-//			ut.begin();
-//
-//			Jugador upJugador = em.find(Jugador.class, request.getParameter("id"));
-//
-//			em.persist(upJugador);
-//
-//			upJugador.setNombre(request.getParameter("nombre"));
-//			upJugador.setApellidos(request.getParameter("apellidos"));
-//			
-//			if (request.getParameter("apodo") != null) 
-//				upJugador.setAlias(request.getParameter("apodo"));
-//
-//			// update posicion
-//			if (upJugador.getPosicion() != request.getParameter("posicion")) {  // pos was changed
-//				Posicion old_posicion = em.find(Posicion.class, upJugador.getPosicion());
-//				em.persist(old_posicion);
-//
-//				Posicion new_posicion = em.find(Posicion.class, request.getParameter("posicion"));
-//				em.persist(new_posicion);
-//
-//				old_posicion.removeJugador();
-//				upJugador.setPosicion(new_posicion);
-//			}
-//
-//			ut.commit();
-//
+		
+		String requestMethod = request.getMethod();
+
+		if (requestMethod == "GET") {
+			return "EditarJugadorForm.jsp";
+		}		
+
+		try {
+			
+			conn = ds.getConnection();
+			//cogemos al jugador
+			Jugador upJugador = new Jugador();
+			
+			Statement sqlStatement = conn.createStatement();
+			String query = "SELECT * FROM jugadores WHERE dni = '" + request.getParameter("id") + "'";
+			System.out.print(query);
+			ResultSet rs = sqlStatement.executeQuery(query);
+			
+			rs.next();
+			upJugador.setDni(request.getParameter("id"));
+			upJugador.setPosicion(rs.getString("posicion_nombre"));		
+			upJugador.setNombre(request.getParameter("nombre"));
+			upJugador.setApellidos(request.getParameter("apellidos"));
+			
+			if (request.getParameter("apodo") != null) 
+				upJugador.setAlias(request.getParameter("apodo"));
+
+			// update posicion
+			if (upJugador.getPosicion() != request.getParameter("posicion")) {  // pos was changed
+				
+				//Cogemos la posicion antigua
+				Statement sqlStatement_pos_old = conn.createStatement();
+				query = "SELECT * FROM posiciones WHERE nombre = '" + upJugador.getPosicion() + "'";
+				System.out.print(query);
+				rs = sqlStatement_pos_old.executeQuery(query);
+				rs.next();
+				int old_num_jugadores = rs.getInt("num_jugadores");
+				
+				//Cogemos la posicion nueva
+				
+				Statement sqlStatement_pos_new = conn.createStatement();
+				query = "SELECT * FROM posiciones WHERE nombre = '" + request.getParameter("posicion") + "'";
+				System.out.print(query);
+				rs = sqlStatement_pos_new.executeQuery(query);
+				rs.next();
+				int new_num_jugadores = rs.getInt("num_jugadores");
+
+				//Actualizamos la posicion antigua
+				Statement pos_old = conn.createStatement();
+				old_num_jugadores --;				
+				query = "UPDATE posiciones SET num_jugadores = '" + old_num_jugadores + "' WHERE (nombre = '" + upJugador.getPosicion() + "')";
+				System.out.print(query);				
+				pos_old.execute(query);
+				
+				//Actualizamos la posicion nueva
+				Statement pos_new = conn.createStatement();
+				new_num_jugadores ++;				
+				query = "UPDATE posiciones SET num_jugadores = '" + new_num_jugadores + "' WHERE (nombre = '" + request.getParameter("posicion") + "')";
+				System.out.print(query);				
+				pos_new.execute(query);
+				
+				//Actualizamos la posición
+				upJugador.setPosicion(request.getParameter("posicion"));
+			}
+			
+			//Actualizamos Jugador
+			Statement sqlStatement_ins = conn.createStatement();
+			query = ""
+					+ "UPDATE jugadores SET nombre = '" + upJugador.getNombre() + "', apellidos = '" + 
+					upJugador.getApellidos() + "', alias = '" + upJugador.getAlias() + "',  posicion_nombre = '" +  upJugador.getPosicion()  + "' WHERE (dni = '" + upJugador.getDni() + "')" ;            				
+			System.out.print(query);
+			sqlStatement_ins.execute(query);
+
 			return "Home.jsp";
-//
-//		} catch (IllegalArgumentException e) {
-//
-//			System.out.print("Error al editar jugador" + e.getMessage());
-//			
-//			request.setAttribute("error", e.getMessage());
-//			
-//			return "EditarJugadorForm.jsp";
-//
-//		} catch (Exception e) {
-//			System.out.print("Shit, something went wrong" + e.getMessage());
-//			
-//			throw (ServletException) e;
-//		}
-//
+
+		} catch (IllegalArgumentException e) {
+
+			System.out.print("Error al editar jugador" + e.getMessage());
+			
+			request.setAttribute("error", e.getMessage());
+			
+			return "EditarJugadorForm.jsp";
+
+		} catch (Exception e) {
+			System.out.print("Shit, something went wrong" + e.getMessage());
+			
+			throw (ServletException) e;
+		}
+
 	}
 
 	private String InsertJugador(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -3,14 +3,19 @@
 	contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"
 	errorPage="Error.jsp"
-	import = "entities.Jugador"
-    import = "entities.Posicion"
+	import = "beans.Jugador"
+    import = "beans.Posicion"
     import = "java.util.List"
     import = "javax.persistence.PersistenceContext"
 	import = "javax.persistence.Query"
 	import = "javax.persistence.EntityManager"
 	import = "javax.persistence.EntityManagerFactory"
 	import = "javax.persistence.Persistence"
+	import = "javax.naming.InitialContext"
+	import = "javax.sql.DataSource"
+	import = "java.sql.Connection"
+	import = "java.sql.ResultSet"
+	import = "java.sql.Statement"
 %>
 
 <!DOCTYPE html>
@@ -35,63 +40,91 @@
 			<p>Error: <%= request.getAttribute("error").toString() %></p>
 		<%
 		}
-		EntityManagerFactory factory = Persistence.createEntityManagerFactory("PU");
-		EntityManager em = factory.createEntityManager();
 		
-		Jugador j = em.find(Jugador.class, request.getParameter("id"));
+		
+		InitialContext ic = new InitialContext();
+
+    	DataSource ds = (DataSource) ic.lookup("jdbc/tiwp2");
+    	Connection conn = ds.getConnection();
+		
+		//Cogemos el jugador
+		Statement sqlStatement = conn.createStatement();
+		String query = "SELECT * FROM jugadores WHERE dni = '" + request.getParameter("id") + "'";
+		System.out.print(query);
+		ResultSet rs = sqlStatement.executeQuery(query);
+		
+		rs.next();
+		String nombre = rs.getString("nombre");
+		String apellidos = rs.getString("apellidos");
+		String alias = rs.getString("alias");
+		String posicion = rs.getString("posicion_nombre");
+		
+		//EntityManagerFactory factory = Persistence.createEntityManagerFactory("PU");
+		//EntityManager em = factory.createEntityManager();
+		
+		//Jugador j = em.find(Jugador.class, request.getParameter("id"));
 		%>
 		
 		<article>
 			<form action="EditarJugador.html?id=<%= request.getParameter("id") %>" method="post">
 				<p>DNI: <%= request.getParameter("id") %></p><br/>
 				<label for="f_nombre"> Nombre:</label><br/>
-				  <input type="text" name="nombre"  value=<%= j.getNombre() %>><br/>
+				  <input type="text" name="nombre"  value=<%= nombre %>><br/>
 				<label for="f_apellidos"> Apellidos:</label><br/>
-				  <input type="text" name="apellidos"  value=<%= j.getApellidos() %>><br/>
+				  <input type="text" name="apellidos"  value=<%= apellidos %>><br/>
 				<label for="f_apodo"> Apodo:</label><br/>
-				  <%
-				  if (j.getAlias() == null) {
+				
+				<%
+				  if (alias == null || alias == "null") {
 				  %>
 				  	<input type="text" name="apodo" /><br/>
 			  	  <%
 				  } else {
 				  %>
-				    <input type="text" name="apodo"  value=<%= j.getAlias() %>><br/>
+				    <input type="text" name="apodo"  value=<%= alias %>><br/>
 				  <%
 				  }
 				  %>
+				  
 				<label for="f_posicion"> Posicion:</label><br/>
 				    <select name="posicion">
 						<%
+						
 						// get posiciones
+				    	
+				    	Statement sqlStatement_pos = conn.createStatement();
+				    	System.out.print("SELECT * FROM posiciones");
+						rs = sqlStatement_pos.executeQuery("SELECT * FROM posiciones");
 						
-						Query query = em.createNamedQuery("Posicion.getPosiciones");
-						
-						List<Posicion> posiciones = query.getResultList();
 						
 						
-						for (Posicion p : posiciones) {
+						while(rs.next()) {
+								
+							String nombre_pos = rs.getString("nombre");
+							int max_jugadores = rs.getInt("max_jugadores");
+							int num_jugadores = rs.getInt("num_jugadores");
 							
-							// leave player's position as the selected one
-							if (p.getNombre() == j.getPosicion()) {
+							if (nombre_pos == posicion) {
 							%>
-								<option value="<%= p.getNombre() %>" selected><%= p.getNombre() %></option>
+								<option value="<%= nombre_pos %>" selected><%= nombre_pos %></option>
 							<%
 							}
-							else if (p.isMax()) continue;
+							else if (max_jugadores == num_jugadores) continue;
 							else {
 							%>
-								<option value="<%= p.getNombre() %>"><%= p.getNombre() %></option>
+								<option value="<%= nombre_pos %>"><%= nombre_pos %></option>
 							<%
 							}
 						}
-						em.close();
 						%>
 					</select>
 
         		<input type="submit" value="Submit" />
 			</form>
 		</article>
+		
+		
+		
 
 
 	<%@ include file="Footer.jsp" %>
