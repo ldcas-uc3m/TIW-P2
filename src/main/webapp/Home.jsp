@@ -2,15 +2,18 @@
 	page language="java"
 	contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"
-    import = "entities.Posicion"
-    import = "entities.Jugador"
+    import = "beans.Posicion"
+    import = "beans.Jugador"
     import = "java.util.List"
     import = "javax.persistence.PersistenceContext"
 	import = "javax.persistence.Query"
 	import = "javax.persistence.EntityManager"
 	import = "javax.persistence.EntityManagerFactory"
-	import = "javax.persistence.Persistence"
-	
+	import = "javax.sql.DataSource"
+	import = "javax.naming.InitialContext"
+	import = "java.sql.Connection"
+	import = "java.sql.ResultSet"
+	import = "java.sql.Statement"
 %>
 
 <!DOCTYPE html>
@@ -27,8 +30,15 @@
     	
     	
     	<%
-    	EntityManagerFactory factory = Persistence.createEntityManagerFactory("PU");
-		EntityManager em = factory.createEntityManager();
+    	InitialContext ic = new InitialContext();
+    	
+    	DataSource ds = (DataSource) ic.lookup("jdbc/tiwp2");
+    	Connection conn = ds.getConnection();
+    	
+    	
+    	Statement sqlStatement_pos = conn.createStatement();
+    	System.out.print("SELECT * FROM posiciones");
+		ResultSet rs = sqlStatement_pos.executeQuery("SELECT * FROM posiciones");
     	%>
     	
     	
@@ -36,13 +46,13 @@
     	<p>
     		| 
 	    	<%
-	    	// get posiciones
-			Query query_pos = em.createNamedQuery("Posicion.getPosiciones");
-			List<Posicion> posiciones = query_pos.getResultList();
-			
-			for (Posicion pos : posiciones) {
+			while(rs.next()) {
+				
+				String nombre = rs.getString("nombre");
+				int max_jugadores = rs.getInt("max_jugadores");
+				int num_jugadores = rs.getInt("num_jugadores");
 			%>
-				<%= pos.getNombre() %>s: <%= pos.getNumJugadores() %>/<%= pos.getMaxJugadores() %> | 
+				<%= nombre %>s: <%= num_jugadores %>/<%= max_jugadores %> | 
 			<%
 			}
 			%>
@@ -52,33 +62,36 @@
 		<!-- Jugadores -->
 	  	<ol start="0">
 	    <%
-	
-	    Query query_jug = em.createNamedQuery("Jugador.findAll");
 	    
-		List<Jugador> jugadores = query_jug.getResultList();
+	    Statement sqlStatement_jug = conn.createStatement();
+	    System.out.print("SELECT * FROM jugadores");
+		ResultSet rs_jug = sqlStatement_jug.executeQuery("SELECT * FROM jugadores");
 		
-	    
-	    for (Jugador j : jugadores) {
+		while(rs_jug.next()) {
+			String dni = rs_jug.getString("dni");
+			String nombre = rs_jug.getString("nombre");
+			String apellidos = rs_jug.getString("apellidos");
+			String alias = rs_jug.getString("alias");
+			String posicion = rs_jug.getString("posicion_nombre");
 	   	%>
 	   		<li>
-	   			[<%= j.getPosicion() %>] <%= j.getNombre() %> 
+	   			[<%= posicion %>] <%= nombre %> 
 		   		<%
-		   		if (j.getAlias() != null && j.getAlias().length() > 0) {
+		   		if (alias != null && alias != "null" && alias.length() > 0) {
 	   			%>
-	   				"<%= j.getAlias() %>"
+	   				"<%= alias %>"
 		   		<%
 		   		}
 		   		%>
-	       		<%= j.getApellidos() %> - <%= j.getDni() %>
+	       		<%= apellidos %> - <%= dni %>
 	       		
 	       		|
 	     
-	       		<a href="EditarJugadorForm.jsp?id=<%= j.getDni() %>">Editar</a>
-	       		<a href="EliminarJugador.html?id=<%= j.getDni() %>">Eliminar</a>
+	       		<a href="EditarJugadorForm.jsp?id=<%= dni %>">Editar</a>
+	       		<a href="EliminarJugador.html?id=<%= dni %>">Eliminar</a>
 	      	</li>
 	    <%
 	    }
-		em.close();
 	    %>
 	  	</ol>
 	

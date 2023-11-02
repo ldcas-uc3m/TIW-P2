@@ -1,20 +1,16 @@
-package entities;
-
-import java.io.Serializable;
-import javax.persistence.*;
+package beans;
 
 
-/**
- * The persistent class for the posiciones database table.
- * 
- */
-@Entity
-@Table(name="posiciones")
-@NamedQuery(name="Posicion.getPosiciones", query="SELECT p FROM Posicion p")
-public class Posicion implements Serializable {
+enum EnumPosicion {
+	Delantero,
+	Defensa,
+	Medio,
+	Portero
+}
+
+public class Posicion implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Id
 	private String nombre;
 
 	private int max_jugadores;
@@ -56,5 +52,6 @@ public class Posicion implements Serializable {
 
 		this.num_jugadores--;
 	}
+
 
 }

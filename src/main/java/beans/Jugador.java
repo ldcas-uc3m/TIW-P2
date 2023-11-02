@@ -1,33 +1,21 @@
-package entities;
+package beans;
+
 
 import java.io.Serializable;
 
-import javax.persistence.*;
-
 import utils.ValidadorDNI;
 
-
-
-/**
- * The persistent class for the jugadores database table.
- * 
- */
-@Entity
-@Table(name="jugadores")
-@NamedQuery(name="Jugador.findAll", query="SELECT j FROM Jugador j")
+        
 public class Jugador implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Id
 	private String dni;
 
 	private String nombre;
 	private String apellidos;
 	private String alias;
 
-	// uni-directional many-to-one association to Posiciones
-	@ManyToOne()
-	private Posicion posicion;
+	private String posicion;
 
 
 	public Jugador() { }
@@ -83,12 +71,12 @@ public class Jugador implements Serializable {
 
 
 	public String getPosicion() {
-		return this.posicion.getNombre();
+		return this.posicion;
 	}
 
-	public void setPosicion(Posicion posicion) throws IllegalArgumentException {
-		posicion.addJugador();
+	public void setPosicion(String posicion) throws IllegalArgumentException {
 		this.posicion = posicion;
 	}
 
 }
+

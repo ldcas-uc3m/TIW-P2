@@ -3,13 +3,12 @@
 	contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"
 	errorPage="Error.jsp"
-    import = "entities.Posicion"
     import = "java.util.List"
-    import = "javax.persistence.PersistenceContext"
-	import = "javax.persistence.Query"
-	import = "javax.persistence.EntityManager"
-	import = "javax.persistence.EntityManagerFactory"
-	import = "javax.persistence.Persistence"
+	import = "javax.sql.DataSource"
+	import = "javax.naming.InitialContext"
+	import = "java.sql.Connection"
+	import = "java.sql.ResultSet"
+	import = "java.sql.Statement"
 %>
 
 <!DOCTYPE html>
@@ -24,7 +23,6 @@
 	<body>
 
 	<%@ include file="Header.jsp" %>
-
 
 		<h2>Insertar jugador</h2>
 		
@@ -50,22 +48,27 @@
 				    <select name="posicion">
 						<%
 						// get posiciones
-						EntityManagerFactory factory = Persistence.createEntityManagerFactory("PU");
-						EntityManager em = factory.createEntityManager();
-						
-						Query query = em.createNamedQuery("Posicion.getPosiciones");
-						
-						List<Posicion> posiciones = query.getResultList();
-						
-						for (Posicion p : posiciones) {
-							System.out.print(p.getNumJugadores());
-							if (p.isMax()) continue;
+						InitialContext ic = new InitialContext();
+    	
+				    	DataSource ds = (DataSource) ic.lookup("jdbc/tiwp2");
+				    	Connection conn = ds.getConnection();
+				    	
+				    	
+				    	Statement sqlStatement_pos = conn.createStatement();
+				    	System.out.print("SELECT * FROM posiciones");
+						ResultSet rs = sqlStatement_pos.executeQuery("SELECT * FROM posiciones");
+
+						while(rs.next()) {
+								
+							String nombre = rs.getString("nombre");
+							int max_jugadores = rs.getInt("max_jugadores");
+							int num_jugadores = rs.getInt("num_jugadores");
 							
+							if (max_jugadores == num_jugadores) continue;
 						%>
-							<option value="<%= p.getNombre() %>"><%= p.getNombre() %></option>
+							<option value="<%= nombre %>"><%= nombre %></option>
 						<%
 						}
-						em.close();
 						%>
 					</select>
 
