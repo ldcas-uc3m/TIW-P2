@@ -6,7 +6,20 @@ Universidad Carlos III de Madrid
 
 
 ## Project statement
+Se ha de construir una aplicación Web Dinámica, en la que se mantenga los nombres y posiciones de la plantilla de un equipo de futbol.
 
+Por cada jugador se tendrá la siguiente información:
+- Nombre
+- Apellidos
+- DNI
+- Alias
+- Posición. Exclusivamente estas: delantero, defensa, medio y portero.
+
+
+Las restricciones por cada equipo son las siguientes:
+1. Cada plantilla tiene 25 jugadores, 3 porteros, 8 defensas, 8 medios y 6 delanteros.
+2. La práctica es continuación de [la anterior](https://github.com/ldcas-uc3m/TIW-P1), pero en esta para la gestión de los jugadores es obligatorio el uso de [JPA](https://github.com/ldcas-uc3m/TIW-P2) y [JDBC](https://github.com/ldcas-uc3m/TIW-P2/tree/jdbc).
+3. Se incluirá también por cada jugador una foto del mismo.
 
 
 
