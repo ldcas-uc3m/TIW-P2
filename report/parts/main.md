@@ -72,7 +72,7 @@ Es un JSP que representa la cabecera de página de en este caso el Atlético de 
 Al igual que el archivo anterior un JSP que representa el footer de página y cuyo objetivo es ser "generalizado" para poder ser reutilizado en distintas páginas.
 
 ### `Error.jsp`
-Se trata del JSP que implementa la página de error con el tipo de error y sus características indicando al usuario lo que ha pasado por medio de un mensaje.
+Esta página, como su propio nombre indica, es la destinada a mostrar errores y permitir lanzar los mensajes de error y excepciones pertinentes. Además, se incluye un botón que permite volver a la página principal para poder seguir navegando si es que ya estabas dentro de la propia aplicación cuando el error dió lugar.
 
 
 # Conclusiones
