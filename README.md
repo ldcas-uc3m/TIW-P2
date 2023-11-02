@@ -70,7 +70,7 @@ https://nexus.payara.fish/#browse/browse:payara-community:fish%2Fpayara%2Fdistri
         ```sql
         mysql> exit;
         ```
-    5. Use the [`db_create.sql`](LAB2-JPA/src/main/java/db_create.sql) script to create the `tiwp2` table inside of the `tiwp2` database.
+    5. Use the [`db_create.sql`](db_create.sql) script to create the `tiwp2` table inside of the `tiwp2` database.
         - Linux
             ```bash
             $ mysql -u root -proot tiwp2 < <path-to>/dbCreate.sql
