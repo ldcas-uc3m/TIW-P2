@@ -110,38 +110,73 @@ public class FrontController extends HttpServlet {
 
 	private String DeleteJugador(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-//		try {
+		try {
 //			
 //			ut.begin();
 //
 //			// search jugador
 //			Jugador toDeleteJugador = em.find(Jugador.class, request.getParameter("id"));			
 //
-//			// delete jugador
 //			em.remove(toDeleteJugador);
 //
-//			// update posicion
 //			Posicion posicion = em.find(Posicion.class, toDeleteJugador.getPosicion());
 //			em.persist(posicion);
 //			posicion.removeJugador();
 //			
 //			ut.commit();
-//
+		
+			conn = ds.getConnection();
+			
+			// coger jugador
+			Statement sqlStatement = conn.createStatement();
+			String query = "SELECT * FROM jugadores WHERE dni = '" + request.getParameter("id") + "'";
+			System.out.print(query);
+			ResultSet rs = sqlStatement.executeQuery(query);
+			
+			// coger posicion
+			rs.next();
+			String nombre = rs.getString("posicion_nombre");
+	
+			Statement sqlStatement_pos = conn.createStatement();
+			query = "SELECT * FROM posiciones WHERE nombre = '" + nombre + "'";
+			System.out.print(query);
+			rs = sqlStatement_pos.executeQuery(query);
+			rs.next();
+			int num_jugadores = rs.getInt("num_jugadores");
+			
+			if (num_jugadores <= 0) {
+				throw new IllegalArgumentException("Se ha alcanzado el mínimo");
+			}
+			
+			
+			// delete jugador
+			Statement st = conn.createStatement();
+			query = "DELETE FROM jugadores WHERE dni = '" + request.getParameter("id") + "'";
+			System.out.print(query);
+			st.executeUpdate(query);
+
+			// update posicion
+			num_jugadores--;
+			Statement sqlStatement_aug = conn.createStatement();
+			query = "UPDATE posiciones SET num_jugadores = '" + num_jugadores + "' WHERE (nombre = '" + nombre + "')";
+			System.out.print(query);
+			sqlStatement_aug.execute(query);
+
 			return "Home.jsp";
-//
-//		} catch (IllegalArgumentException e) {
-//
-//			System.out.print("Error al eliminar jugador" + e.getMessage());
-//			
-//			request.setAttribute("error", e.getMessage());
-//			
-//			return "Home.jsp";
-//
-//		} catch (Exception e) {
-//			System.out.print("Shit, something went wrong" + e.getMessage());
-//			
-//			throw (ServletException) e;
-//		}
+
+		} catch (IllegalArgumentException e) {
+
+			System.out.print("Error al eliminar jugador" + e.getMessage());
+			
+			request.setAttribute("error", e.getMessage());
+			
+			return "Home.jsp";
+
+		} catch (Exception e) {
+			System.out.print("Shit, something went wrong" + e.getMessage());
+			
+			throw (ServletException) e;
+		}
 		
 	}
 
@@ -217,15 +252,6 @@ public class FrontController extends HttpServlet {
 			return "InsertarJugadorForm.jsp";
 		}
 		
-		
-		// TODO: comprobar que no existe ya el jugador
-//		if (em.find(Jugador.class, request.getParameter("dni")) != null) {
-//			System.out.print("El jugador con DNI " + request.getParameter("dni") + " ya existe");
-//			request.setAttribute("error", "El jugador con DNI " + request.getParameter("dni") + " ya existe");
-//			
-//			return "InsertarJugadorForm.jsp";
-//		}
-		
 		try {
 			conn = ds.getConnection();
 
@@ -236,11 +262,25 @@ public class FrontController extends HttpServlet {
 			nuJugador.setAlias(request.getParameter("alias"));
 			nuJugador.setPosicion(request.getParameter("posicion"));
 			
+			// comprobar que no existe ya el jugador
+			Statement sqlStatement_jug = conn.createStatement();
+			String query = "SELECT * FROM jugadores WHERE dni = '" + nuJugador.getDni() + "'";
+			System.out.print(query);
+			ResultSet rs = sqlStatement_jug.executeQuery(query);
+			
+			if (rs.isBeforeFirst()) {
+				System.out.print("El jugador con DNI " + request.getParameter("dni") + " ya existe");
+				request.setAttribute("error", "El jugador con DNI " + request.getParameter("dni") + " ya existe");
+				
+				return "InsertarJugadorForm.jsp";
+			}
+			
+	
 			// get posiciones data
 			Statement sqlStatement_pos = conn.createStatement();
-			String query = "SELECT * FROM posiciones WHERE nombre = '" + nuJugador.getPosicion() + "'";
+			query = "SELECT * FROM posiciones WHERE nombre = '" + nuJugador.getPosicion() + "'";
 			System.out.print(query);
-			ResultSet rs = sqlStatement_pos.executeQuery(query);
+			rs = sqlStatement_pos.executeQuery(query);
 			
 			rs.next();
 
